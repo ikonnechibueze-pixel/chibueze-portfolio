@@ -3,7 +3,7 @@ import {
   ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpenText,
   Braces, Check, ChevronLeft, ChevronRight, CircleDot, Database, FileText,
   Fingerprint, Github, Globe2, Home, Layers3, Linkedin, Mail, MapPin,
-  Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun, Leaf, CalendarDays, ClipboardCheck,
+  Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun, Leaf, CalendarDays, ClipboardCheck, Compass, Blocks, ScanSearch, ChartNoAxesCombined, LockKeyhole, Rocket,
   Workflow, X,
 } from 'lucide-react';
 import { notes, projects, type Note, type Project } from './data';
@@ -77,10 +77,6 @@ function Sidebar({ route, theme, setTheme }: {
 
 function SectionTopline({ number, label, right }: { number: string; label: string; right?: ReactNode }) {
   return <div className="section-topline"><span className="eyebrow">{number} <span className="divider">/</span> {label}</span>{right}</div>;
-}
-
-function Orb() {
-  return <div className="orb" aria-hidden="true"><span className="orb-mountain mountain-a"/><span className="orb-mountain mountain-b"/><span className="orb-mountain mountain-c"/></div>;
 }
 
 function Hero() {
@@ -298,12 +294,85 @@ const principles = [
   { title: 'Visual design should communicate', body: 'Hierarchy and restraint matter more than decoration.' },
 ];
 
+const researchExamples = [
+  {
+    number: '01',
+    label: 'BOTANICAL RECORDS',
+    title: 'Make the evidence traceable.',
+    body: 'Examining the relationship between specimen requests, botanical references, accession identity and expert authentication before deciding how to present a record.',
+    path: '/work/virtual-herbarium',
+    link: 'See the herbarium case study',
+  },
+  {
+    number: '02',
+    label: 'SYSTEM INVESTIGATION',
+    title: 'Find the real trust problem.',
+    body: 'Thinking through eligibility, issuance, public verification and revocation—because a beautiful certificate cannot establish its own validity.',
+    path: '/work/credential-verification',
+    link: 'See the verification case study',
+  },
+  {
+    number: '03',
+    label: 'DATA REASONING',
+    title: 'Ask what the numbers should answer.',
+    body: 'Starting with the distinction someone needs to see, then deciding whether a comparison, report, chart or simpler explanation is the clearest response.',
+    path: '/writing/useful-chart-test',
+    link: 'Read the analysis note',
+  },
+];
+
+const toolGroups = [
+  { number: '01', title: 'Research & discovery', icon: Compass, detail: 'Requirements · technical comparisons · workflow investigation · source review' },
+  { number: '02', title: 'Applications & UI', icon: Braces, detail: 'React · TypeScript · Vite · interface development' },
+  { number: '03', title: 'Backend & APIs', icon: Blocks, detail: 'Supabase · Edge Functions · authentication · access control' },
+  { number: '04', title: 'Data & analysis', icon: ChartNoAxesCombined, detail: 'PostgreSQL · SQL · Excel · relational modelling · BI thinking' },
+  { number: '05', title: 'Systems & product', icon: Workflow, detail: 'User journeys · record lifecycles · role mapping · data rules' },
+  { number: '06', title: 'Security & validation', icon: LockKeyhole, detail: 'Least privilege · audit trails · permission testing · safe defaults' },
+  { number: '07', title: 'Delivery & infrastructure', icon: Rocket, detail: 'GitHub · Vercel · version control · deployment checks' },
+  { number: '08', title: 'Visual communication', icon: Palette, detail: 'Photoshop · Lightroom · CorelDRAW · print & campaign design' },
+];
+
+function ResearchInPractice() {
+  return <section className="research-section glass" aria-labelledby="research-heading">
+    <div className="research-lead">
+      <span className="overline">RESEARCH & ANALYSIS / IN PRACTICE</span>
+      <h2 id="research-heading">I investigate before I build.</h2>
+      <p>Research is not a step I skip on the way to code. I compare sources, examine how work actually happens and look for the rules, questions and exceptions that a useful solution needs to respect.</p>
+      <div className="research-signature"><ScanSearch size={17} aria-hidden="true" /> Questions → Evidence → Decisions</div>
+    </div>
+    <div className="research-examples">
+      {researchExamples.map((item) => <article className="research-example" key={item.number}>
+        <span className="research-counter">{item.number} <span>/ {item.label}</span></span>
+        <h3>{item.title}</h3>
+        <p>{item.body}</p>
+        <AnchorButton to={item.path} className="research-link" icon={false}>{item.link} <ArrowUpRight size={14} aria-hidden="true" /></AnchorButton>
+      </article>)}
+    </div>
+  </section>;
+}
+
+function ToolsAndMethods() {
+  return <section className="tool-section glass" aria-labelledby="tool-heading">
+    <span className="overline">THE TOOLS & THINKING BEHIND THE WORK</span>
+    <div className="tool-heading-row">
+      <h2 id="tool-heading">Tools are there to serve the work.</h2>
+      <p>Software, investigation, information structure, testing and visual work all belong here. These are representative tools and practices—not inflated job titles.</p>
+    </div>
+    <div className="tool-groups">{toolGroups.map(({ number, title, icon: Icon, detail }) => <article key={number} className="tool-group">
+      <div className="tool-group-heading"><Icon size={20} aria-hidden="true" /><span className="tool-index">{number}</span></div>
+      <h3>{title}</h3>
+      <p>{detail}</p>
+    </article>)}</div>
+  </section>;
+}
+
 function AboutPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="NOT A COLLECTION OF JOB TITLES" title="I work across the problem, not just one layer of it." body="Some challenges need code. Others need a clearer question, better data rules, a simpler flow or a piece of communication that people can actually understand." icon={<Fingerprint size={25}/>} />
     <section className="about-story glass"><span className="overline">A LITTLE CONTEXT</span><div className="about-story-grid"><h2>I connect the pieces that usually get separated.</h2><div><p>I'm interested in what happens between research, data, software systems and the way people experience them. I often begin by understanding the work people are trying to do — then I decide what deserves to become software, what needs better structure and what simply needs clearer communication.</p><p>I build applications, think through relational data and workflows, investigate technical options and work on visual materials. The disciplines are different; the underlying goal is the same: make something useful and understandable.</p></div></div></section>
     <section className="process-section glass"><div className="section-head"><span className="overline">HOW I APPROACH PROBLEMS</span><h2>From an unclear starting point to something people can use.</h2></div><div className="process-grid">{process.map((p) => <article key={p.number}><span className="process-index">{p.number}</span><h3>{p.title}</h3><strong>{p.question}</strong><p>{p.body}</p></article>)}</div></section>
+    <ResearchInPractice />
     <section className="principles-section glass"><div><span className="overline">THINGS I CARE ABOUT</span><h2>Principles over buzzwords.</h2></div><div className="principle-list">{principles.map((p) => <div key={p.title}><Check size={18}/><div><h3>{p.title}</h3><p>{p.body}</p></div></div>)}</div></section>
-    <section className="tool-section glass"><span className="overline">TOOLS I OFTEN REACH FOR</span><h2>Tools are there to serve the work.</h2><div className="tool-groups"><div><h3><Braces size={19}/> Applications</h3><p>React · TypeScript · Vite · Supabase</p></div><div><h3><Database size={19}/> Data</h3><p>PostgreSQL · relational modelling · Excel · BI</p></div><div><h3><ShieldCheck size={19}/> Delivery</h3><p>GitHub · Vercel · access control · testing</p></div><div><h3><Palette size={19}/> Visual</h3><p>Photoshop · Lightroom · CorelDRAW</p></div></div></section>
+    <ToolsAndMethods />
     <div className="about-cta glass"><div><span className="overline">KEEP GOING</span><h2>Want to see this thinking in practice?</h2></div><AnchorButton to="/work" className="button button-dark" icon={false}>Explore case studies <ArrowRight size={16}/></AnchorButton></div><Footer/></main>;
 }
 

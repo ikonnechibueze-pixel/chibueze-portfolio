@@ -113,9 +113,9 @@ export const notes: Note[] = [
   },
   {
     slug: 'useful-chart-test',
-    title: 'What makes a system feel simple?',
+    title: 'The useful chart test',
     tag: 'Data & analysis',
-    teaser: 'Notes on complexity, mental models and good defaults.',
+    teaser: 'What does this visual make easier to understand or decide?',
     readTime: '2 min',
     visual: 'horizon',
     paragraphs: [
@@ -126,9 +126,9 @@ export const notes: Note[] = [
   },
   {
     slug: 'make-complexity-legible',
-    title: 'Building in public (again)',
+    title: 'Making complex work legible',
     tag: 'Design & communication',
-    teaser: 'On learning, shipping and the messy middle.',
+    teaser: 'Why software systems and visual design share the problem of clarity.',
     readTime: '3 min',
     visual: 'layers',
     paragraphs: [
