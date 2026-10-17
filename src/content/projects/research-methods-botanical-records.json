@@ -1,0 +1,35 @@
+{
+  "slug": "research-methods-botanical-records",
+  "index": "05",
+  "title": "Researching Botanical Record Workflows",
+  "shortTitle": "Botanical Research",
+  "category": "Research · Information structure · Evidence",
+  "status": "Research & discovery practice",
+  "description": "Investigating source quality, specimen identity and expert review needs before defining a digital herbarium workflow.",
+  "question": "What must be established about specimen identity, provenance and authentication before digital records can be trusted?",
+  "design": "Compared the role of external botanical reference sources with locally verified specimen identity; mapped requests, review decisions and authentication responsibilities into a dependable workflow.",
+  "focus": [
+    "Examine reference-source boundaries before integrating lookups",
+    "Keep externally suggested identifications separate from expert authentication",
+    "Trace requests, physical accession identity and digital record states",
+    "Map the questions to ask before technical implementation"
+  ],
+  "technology": [
+    "Requirements analysis",
+    "GBIF / POWO reference research",
+    "Workflow mapping",
+    "Domain research"
+  ],
+  "accent": "mint",
+  "visualLabel": "RESEARCH TO REQUIREMENTS",
+  "steps": [
+    "Question",
+    "Compare",
+    "Map",
+    "Specify"
+  ],
+  "reflection": "Research does not replace expert judgment; it makes the conditions for using that judgment clearer.",
+  "workType": "research",
+  "published": true,
+  "coverImage": ""
+}

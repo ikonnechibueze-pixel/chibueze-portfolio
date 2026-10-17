@@ -6,7 +6,7 @@ import {
   Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun, Leaf, CalendarDays, ClipboardCheck, Compass, Blocks, ScanSearch, ChartNoAxesCombined, LockKeyhole, Rocket,
   Workflow, X,
 } from 'lucide-react';
-import { notes, projects, type Note, type Project } from './data';
+import { notes, projects, site, type Note, type Project, type WorkType } from './data';
 
 type Route = '/' | '/work' | '/writing' | '/about' | '/contact' | string;
 type Theme = 'light' | 'dark';
@@ -14,8 +14,8 @@ type Theme = 'light' | 'dark';
 const DEFAULT_CONTACT_EMAIL = 'Ikonnechibueze@gmail.com';
 
 const social = {
-  github: import.meta.env.VITE_GITHUB_URL?.trim() || '',
-  linkedin: import.meta.env.VITE_LINKEDIN_URL?.trim() || '',
+  github: site.githubUrl?.trim() || import.meta.env.VITE_GITHUB_URL?.trim() || '',
+  linkedin: site.linkedinUrl?.trim() || import.meta.env.VITE_LINKEDIN_URL?.trim() || '',
 };
 
 function readRoute(): Route {
@@ -91,8 +91,8 @@ function Hero() {
     <div className="hero-content">
       <SectionTopline number="01" label="04" right={<div className="status-name">Chibueze Ikonne <span className="online-dot" /></div>} />
       <div className="hero-copy">
-        <h1 id="hero-title">I turn unclear<br />problems into systems<br />people can actually use.</h1>
-        <p>I work across research, systems, data, product thinking and visual communication.</p>
+        <h1 id="hero-title">{site.heroHeadline}</h1>
+        <p>{site.heroSummary}</p>
         <div className="actions">
           <AnchorButton to="/work" className="button button-dark">Explore my work <ArrowRight size={16} /></AnchorButton>
           <AnchorButton to="/contact" className="button button-ghost" icon={false}>Get in touch</AnchorButton>
@@ -177,8 +177,10 @@ function FeaturedDevice({ project }: { project: Project }) {
 
 function FeaturedWork() {
   const [selected, setSelected] = useState(0);
-  const project = projects[selected];
-  const show = (dir: number) => setSelected((current) => (current + dir + projects.length) % projects.length);
+  const featuredProjects = projects.filter((p) => (p.workType || 'systems') === 'systems');
+  const project = featuredProjects[selected % featuredProjects.length] || projects[0];
+  const show = (dir: number) => setSelected((current) => (current + dir + featuredProjects.length) % featuredProjects.length);
+  if (!project) return <section className="featured glass"><h2>Selected work</h2><p>New case studies are being prepared.</p></section>;
   return <section className="featured glass" aria-labelledby="featured-title">
     <div className="panel-heading"><div><h2 id="featured-title">Selected Work</h2><p>A few projects where I’ve turned complex problems into simple, useful experiences.</p></div><AnchorButton to="/work" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
     <div className="feature-content" key={project.slug}>
@@ -186,7 +188,7 @@ function FeaturedWork() {
       <FeaturedDevice project={project} />
     </div>
     <div className="feature-controls" aria-label="Selected work carousel controls">
-      <button aria-label="Previous project" onClick={() => show(-1)}><ChevronLeft size={19} /></button><span>{selected + 1} <span className="divider">/</span> {projects.length}</span><button aria-label="Next project" onClick={() => show(1)}><ChevronRight size={19} /></button>
+      <button aria-label="Previous project" onClick={() => show(-1)}><ChevronLeft size={19} /></button><span>{selected + 1} <span className="divider">/</span> {featuredProjects.length}</span><button aria-label="Next project" onClick={() => show(1)}><ChevronRight size={19} /></button>
     </div>
   </section>;
 }
@@ -203,7 +205,7 @@ function NotesPanel() {
   return <section className="notes-panel glass" aria-labelledby="notes-heading">
     <div className="panel-heading"><div><h2 id="notes-heading">Notes & Writing</h2></div><AnchorButton to="/writing" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
     <div className="note-list">{notes.map((note) => <a href={`#/writing/${note.slug}`} className="note-item" key={note.slug}>
-      <NoteArtwork type={note.visual} /><div className="note-copy"><h3>{note.title}</h3><p>{note.teaser}</p></div><span className="note-date">Draft</span>
+      <NoteArtwork type={note.visual} /><div className="note-copy"><h3>{note.title}</h3><p>{note.teaser}</p></div><span className="note-date">{note.status || "Draft"}</span>
     </a>)}</div>
     
   </section>;
@@ -252,17 +254,33 @@ function PageIntro({ index, kicker, title, body, icon }: { index: string; kicker
   return <header className="page-intro glass"><SectionTopline number={index} label="04" right={<span className="status-name">CHIBUEZE IKONNE <span className="online-dot" /></span>}/><div className="page-intro-content">{icon && <span className="page-icon">{icon}</span>}<span className="overline">{kicker}</span><h1>{title}</h1><p>{body}</p></div></header>;
 }
 
+const workFilters: { label: string; value: WorkType | 'all' }[] = [
+  { label: 'All work', value: 'all' }, { label: 'Systems & apps', value: 'systems' },
+  { label: 'Research', value: 'research' }, { label: 'Data & analysis', value: 'data' },
+  { label: 'Visual', value: 'visual' },
+];
+function ProjectArtwork({ project, large = false }: { project: Project; large?: boolean }) {
+  // Only CMS-managed images from our own public media folder are accepted.
+  const safeCover = project.coverImage?.startsWith('/media/') ? project.coverImage : '';
+  return safeCover
+    ? <img className={`project-cover${large ? ' project-cover-large' : ''}`} src={safeCover} alt={`${project.title} project preview`} loading="lazy" />
+    : <SystemSketch project={project} large={large} />;
+}
 function WorkPage() {
-  return <main id="main-content" className="main inner-page"><PageIntro index="02" kicker="SELECTED CASE STUDIES" title="The work behind the work." body="Not just what I built — the questions, rules and trade-offs that shaped each project." icon={<Workflow size={25} />}/>
-    <div className="work-cards">{projects.map((project) => <article className="work-card glass" key={project.slug}>
-      <SystemSketch project={project}/><div className="work-card-copy"><div className="work-meta"><span>{project.index} / {project.category}</span><span className="status-label">{project.status}</span></div><h2>{project.title}</h2><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read the case study <ArrowRight size={15}/></AnchorButton></div>
-    </article>)}</div><Footer/></main>;
+  const [filter, setFilter] = useState<WorkType | 'all'>('all');
+  const shown = filter === 'all' ? projects : projects.filter((project) => (project.workType || 'systems') === filter);
+  return <main id="main-content" className="main inner-page"><PageIntro index="02" kicker="SELECTED CASE STUDIES" title="The work behind the work." body="A wider view of my work—systems, research, data thinking and visual communication. Real outcomes, deliberate decisions and work still in progress." icon={<Workflow size={25} />}/>
+    <nav className="work-filters glass" aria-label="Filter work by discipline">{workFilters.map(({ label, value }) => <button type="button" key={value} aria-pressed={filter === value} className={`work-filter${filter === value ? ' selected' : ''}`} onClick={() => setFilter(value)}>{label}</button>)}</nav>
+    {shown.length ? <div className="work-cards">{shown.map((project) => <article className="work-card glass" key={project.slug}>
+      <ProjectArtwork project={project}/><div className="work-card-copy"><div className="work-meta"><span>{project.index} / {project.category}</span><span className="status-label">{project.status}</span></div><h2>{project.title}</h2><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read the case study <ArrowRight size={15}/></AnchorButton></div>
+    </article>)}</div> : <div className="work-empty glass"><span className="overline">DATA & ANALYSIS</span><h2>Evidence comes before the case study.</h2><p>I have not published a standalone data-analysis case study yet. I'd rather add one with a real question, method and verified result than pad the portfolio with decorative charts.</p><AnchorButton to="/writing/useful-chart-test" className="small-button">Read how I think about analysis <ArrowRight size={15}/></AnchorButton></div>}
+    <Footer/></main>;
 }
 
 function ProjectDetail({ project }: { project: Project }) {
   const next = projects[(projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length];
   return <main id="main-content" className="main inner-page"><div className="detail-nav"><AnchorButton to="/work" className="back-link" icon={false}><ArrowLeft size={16}/> All projects</AnchorButton><span>CASE STUDY / {project.index}</span></div>
-    <section className="case-header glass"><div><div className="case-eyebrow">{project.category} · {project.status}</div><h1>{project.title}</h1><p>{project.description}</p><div className="technology-tags">{project.technology.map((t) => <span key={t}>{t}</span>)}</div></div><SystemSketch project={project} large/></section>
+    <section className="case-header glass"><div><div className="case-eyebrow">{project.category} · {project.status}</div><h1>{project.title}</h1><p>{project.description}</p><div className="technology-tags">{project.technology.map((t) => <span key={t}>{t}</span>)}</div></div><ProjectArtwork project={project} large/></section>
     <div className="case-two-col"><section className="case-section glass"><span className="overline">01 — THE QUESTION</span><h2>What needed to make sense?</h2><p>{project.question}</p></section><section className="case-section glass"><span className="overline">02 — MY APPROACH</span><h2>Structure first.</h2><p>{project.design}</p></section></div>
     <section className="case-section glass case-focus"><span className="overline">03 — WHAT MATTERED</span><h2>Decisions beneath the surface.</h2><div className="decision-grid">{project.focus.map((point, index) => <div key={point}><span className="decision-index">0{index + 1}</span><p>{point}</p></div>)}</div></section>
     <section className="case-section glass reflection"><div><span className="overline">04 — THE TAKEAWAY</span><h2>What this work reinforced.</h2><p>{project.reflection}</p></div><AnchorButton to={`/work/${next.slug}`} className="button button-dark" icon={false}>Next case study <ArrowRight size={16}/></AnchorButton></section>
@@ -275,7 +293,7 @@ function WritingPage() {
 }
 
 function NoteDetail({ note }: { note: Note }) {
-  return <main id="main-content" className="main inner-page"><div className="detail-nav"><AnchorButton to="/writing" className="back-link" icon={false}><ArrowLeft size={16}/> All notes</AnchorButton><span>{note.readTime.toUpperCase()} READ</span></div><article className="essay glass"><div className="essay-banner"><NoteArtwork type={note.visual}/></div><div className="essay-body"><span className="overline">DRAFT NOTE / {note.tag}</span><h1>{note.title}</h1><p className="essay-lead">{note.teaser}</p><div className="essay-prose">{note.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="essay-end"><span>— Chibueze Ikonne</span><AnchorButton to="/writing" className="back-link" icon={false}>More notes <ArrowRight size={16}/></AnchorButton></div></div></article><Footer/></main>;
+  return <main id="main-content" className="main inner-page"><div className="detail-nav"><AnchorButton to="/writing" className="back-link" icon={false}><ArrowLeft size={16}/> All notes</AnchorButton><span>{note.readTime.toUpperCase()} READ</span></div><article className="essay glass"><div className="essay-banner"><NoteArtwork type={note.visual}/></div><div className="essay-body"><span className="overline">{(note.status || "Draft").toUpperCase()} NOTE / {note.tag}</span><h1>{note.title}</h1><p className="essay-lead">{note.teaser}</p><div className="essay-prose">{note.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="essay-end"><span>— Chibueze Ikonne</span><AnchorButton to="/writing" className="back-link" icon={false}>More notes <ArrowRight size={16}/></AnchorButton></div></div></article><Footer/></main>;
 }
 
 const process = [
@@ -377,7 +395,7 @@ function AboutPage() {
 }
 
 const FORMSPREE_ID = (import.meta.env.VITE_FORMSPREE_ID || '').trim();
-const CONTACT_EMAIL = (import.meta.env.VITE_CONTACT_EMAIL || '').trim() || DEFAULT_CONTACT_EMAIL;
+const CONTACT_EMAIL = (site.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || '').trim() || DEFAULT_CONTACT_EMAIL;
 const hasFormspree = /^[a-zA-Z0-9]{5,30}$/.test(FORMSPREE_ID);
 const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONTACT_EMAIL);
 
@@ -422,7 +440,7 @@ function ContactForm() {
 
   return <form className="contact-form" onSubmit={submit} noValidate={false}>
     <div className="form-row"><label>YOUR NAME<input name="name" autoComplete="name" placeholder="How should I address you?" maxLength={120} required /></label><label>EMAIL ADDRESS<input name="email" type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} required /></label></div>
-    <label>WHAT IS THIS ABOUT?<select name="subject" defaultValue=""><option value="" disabled>Choose a topic</option><option value="Project collaboration">Project collaboration</option><option value="Website or application">Website or application</option><option value="Data or research">Data or research</option><option value="Visual communication">Visual communication</option><option value="Other inquiry">Other inquiry</option></select></label>
+    <label>WHAT IS THIS ABOUT?<select name="subject" defaultValue=""><option value="" disabled>Choose a topic</option>{(site.contactTopics || []).map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></label>
     <label>MESSAGE<textarea name="message" rows={6} placeholder="Tell me a little about the problem, the context, and what you have in mind." maxLength={4000} required /></label>
     <div className="honey-field" aria-hidden="true"><label htmlFor="website">Leave this field blank</label><input type="text" tabIndex={-1} autoComplete="off" name="website" id="website" /></div>
     <div className="form-bottom"><p>Your details are used to respond to this inquiry. See the <a href="#/privacy">privacy note</a>. No phone number required.</p><button className="button button-dark" disabled={!isReady || state === 'sending'} type="submit">{state === 'sending' ? 'Sending…' : hasFormspree ? 'Send message' : 'Open email draft'}<ArrowRight size={16}/></button></div>
@@ -432,9 +450,9 @@ function ContactForm() {
 }
 
 function ContactPage() {
-  return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="HAVE A PROBLEM THAT NEEDS STRUCTURE?" title="Start with a conversation." body="If you're working through a complicated workflow, exploring an idea or looking for someone who can think across the details, tell me about it." icon={<Send size={25} />} />
+  return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="HAVE A PROBLEM THAT NEEDS STRUCTURE?" title="Start with a conversation." body={site.contactIntro} icon={<Send size={25} />} />
     <div className="contact-layout"><section className="contact-main glass"><div className="section-head"><span className="overline">SEND AN INQUIRY</span><h2>What are you working on?</h2><p>You don't need a perfectly written brief. A few useful details are enough to start.</p></div><ContactForm /></section>
-      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start as good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>Richmond Hill, Ontario<br/><small>Canada</small></span></div></div><div className="contact-side-card glass"><span className="overline">FIND ME ELSEWHERE</span><SocialLinks/><p className="social-hint">Professional profiles appear here when they are connected. No phone number is published.</p></div></aside>
+      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start as good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">FIND ME ELSEWHERE</span><SocialLinks/><p className="social-hint">Professional profiles appear here when they are connected. No phone number is published.</p></div></aside>
     </div><Footer/></main>;
 }
 

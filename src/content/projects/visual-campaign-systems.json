@@ -1,0 +1,35 @@
+{
+  "slug": "visual-campaign-systems",
+  "index": "06",
+  "title": "Event Campaign & Visual Communication",
+  "shortTitle": "Visual Campaigns",
+  "category": "Visual · Print · Campaign design",
+  "status": "Creative work · samples pending approval",
+  "description": "Designing consistent event graphics across different formats while protecting source photography and keeping the message easy to understand.",
+  "question": "How can one visual identity stay recognizable across social, presentation and print formats without losing information or quality?",
+  "design": "Used typography, hierarchy, photography, layout adaptation and production-ready exports to coordinate campaign visuals across varied placements. This summary deliberately avoids publishing client assets without approval.",
+  "focus": [
+    "Strong type hierarchy and restrained visual treatment",
+    "Reusable visual components across changing aspect ratios",
+    "Preserving supplied photography and identity assets",
+    "Quality checks for screen and print export"
+  ],
+  "technology": [
+    "Photoshop",
+    "Lightroom",
+    "CorelDRAW",
+    "Print layout"
+  ],
+  "accent": "violet",
+  "visualLabel": "VISUAL PRODUCTION FLOW",
+  "steps": [
+    "Brief",
+    "Design",
+    "Adapt",
+    "Export"
+  ],
+  "reflection": "A strong design is not just beautiful in one crop. It keeps communicating as requirements and formats change.",
+  "workType": "visual",
+  "published": true,
+  "coverImage": ""
+}

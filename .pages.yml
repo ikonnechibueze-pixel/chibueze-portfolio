@@ -1,0 +1,194 @@
+# Edit content at https://app.pagescms.org after authorizing GitHub.
+media:
+  input: public/media
+  output: /media
+content:
+- name: site
+  label: Website settings & contact
+  type: file
+  path: src/content/site.json
+  format: json
+  fields:
+  - name: heroHeadline
+    label: Homepage headline
+    type: text
+    required: true
+  - name: heroSummary
+    label: Homepage supporting text
+    type: text
+    required: true
+  - name: contactEmail
+    label: Public contact email (mailto fallback)
+    type: string
+    required: true
+  - name: contactIntro
+    label: Contact page introduction
+    type: text
+  - name: contactTopics
+    label: Contact subject options
+    type: string
+    list: true
+  - name: location
+    label: Public location (no street address)
+    type: string
+  - name: githubUrl
+    label: GitHub profile URL
+    type: string
+  - name: linkedinUrl
+    label: LinkedIn profile URL
+    type: string
+- name: projects
+  label: Work & case studies
+  type: collection
+  path: src/content/projects
+  format: json
+  filename: '{fields.slug}.json'
+  view:
+    primary: title
+    fields:
+    - title
+    - workType
+    - status
+  fields:
+  - name: slug
+    label: URL slug (unique; lowercase hyphens)
+    type: string
+    required: true
+    pattern: ^[a-z0-9-]+$
+  - name: index
+    label: Display order (01, 02, etc.)
+    type: string
+    required: true
+  - name: title
+    type: string
+    required: true
+  - name: shortTitle
+    label: Short title
+    type: string
+    required: true
+  - name: workType
+    label: Discipline
+    type: select
+    required: true
+    options:
+      values:
+      - systems
+      - research
+      - data
+      - visual
+  - name: category
+    label: Category line
+    type: string
+    required: true
+  - name: status
+    type: string
+    required: true
+  - name: published
+    label: Visible on site
+    type: boolean
+  - name: description
+    type: text
+    required: true
+  - name: question
+    label: The question
+    type: text
+    required: true
+  - name: design
+    label: My approach
+    type: text
+    required: true
+  - name: focus
+    label: Decisions that mattered
+    type: string
+    list: true
+    required: true
+  - name: technology
+    label: Tools/technologies
+    type: string
+    list: true
+    required: true
+  - name: accent
+    label: Card accent
+    type: select
+    options:
+      values:
+      - blue
+      - mint
+      - violet
+      - amber
+    required: true
+  - name: visualLabel
+    label: Artwork caption
+    type: string
+    required: true
+  - name: steps
+    label: Workflow steps (ideally four)
+    type: string
+    list: true
+    required: true
+  - name: reflection
+    label: Reflection
+    type: text
+    required: true
+  - name: coverImage
+    label: Optional approved cover image
+    type: image
+    description: Leave blank to show the generated schematic. Use only work you have permission to publish.
+- name: notes
+  label: Writing & articles
+  type: collection
+  path: src/content/notes
+  format: json
+  filename: '{fields.slug}.json'
+  view:
+    primary: title
+    fields:
+    - title
+    - tag
+    - status
+  fields:
+  - name: slug
+    label: URL slug (unique; lowercase hyphens)
+    type: string
+    required: true
+    pattern: ^[a-z0-9-]+$
+  - name: title
+    type: string
+    required: true
+  - name: tag
+    label: Topic / tag
+    type: string
+    required: true
+  - name: teaser
+    label: Preview description
+    type: text
+    required: true
+  - name: readTime
+    label: Read time
+    type: string
+    required: true
+  - name: visual
+    label: Thumbnail style
+    type: select
+    options:
+      values:
+      - blueprint
+      - horizon
+      - layers
+    required: true
+  - name: status
+    label: Editorial status
+    type: select
+    options:
+      values:
+      - Draft
+      - Published
+    required: true
+  - name: published
+    label: Visible on website
+    type: boolean
+  - name: paragraphs
+    label: Article paragraphs
+    type: text
+    list: true
+    required: true

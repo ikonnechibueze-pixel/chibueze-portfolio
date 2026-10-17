@@ -1,0 +1,15 @@
+{
+  "slug": "useful-chart-test",
+  "title": "The useful chart test",
+  "tag": "Data & analysis",
+  "teaser": "What does this visual make easier to understand or decide?",
+  "readTime": "2 min",
+  "visual": "horizon",
+  "paragraphs": [
+    "A beautiful chart can still be a weak answer. Before choosing a visual, I want to know who is looking at it, what they need to understand and what they might do differently after seeing it.",
+    "Sometimes the clearest output is a trend. Sometimes it is a comparison, an exception or even a sentence with a number. If the visual does not make an important distinction easier to see, it may not belong on the page.",
+    "Clarity is not the same as simplicity for its own sake. It is deciding which complexity matters and giving it the right amount of space."
+  ],
+  "published": true,
+  "status": "Draft"
+}

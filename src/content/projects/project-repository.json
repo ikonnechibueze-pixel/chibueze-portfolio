@@ -1,0 +1,36 @@
+{
+  "slug": "project-repository",
+  "index": "03",
+  "title": "Project Repository",
+  "shortTitle": "Research Repository",
+  "category": "Knowledge · Access · Data",
+  "status": "System development",
+  "description": "A departmental archive where discovering academic work and accessing restricted documents are different actions.",
+  "question": "How can a university department make past projects discoverable while keeping full-text access deliberate?",
+  "design": "An archive with searchable records, controlled PDF access requests, staff review, role-specific permissions and an approval trail.",
+  "focus": [
+    "Discoverability without uncontrolled file access",
+    "Staff review and access requests",
+    "Archival and restoration states",
+    "Database-backed role permissions"
+  ],
+  "technology": [
+    "React",
+    "TypeScript",
+    "Supabase",
+    "PostgreSQL",
+    "Vercel"
+  ],
+  "accent": "mint",
+  "visualLabel": "ACCESS DECISION FLOW",
+  "steps": [
+    "Discover",
+    "Request",
+    "Review",
+    "Access"
+  ],
+  "reflection": "A useful repository needs two things at once: information people can find and boundaries they can trust.",
+  "workType": "systems",
+  "published": true,
+  "coverImage": ""
+}

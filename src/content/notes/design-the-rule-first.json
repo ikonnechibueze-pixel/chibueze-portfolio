@@ -1,0 +1,15 @@
+{
+  "slug": "design-the-rule-first",
+  "title": "Designing for uncertainty",
+  "tag": "Systems thinking",
+  "teaser": "How I approach ambiguous problems in product design.",
+  "readTime": "3 min",
+  "visual": "blueprint",
+  "paragraphs": [
+    "It is tempting to start with the part that is easy to show: a dashboard, a form or a polished navigation bar. But the first questions are usually less visual. Who owns this record? When can it change? What makes it valid? What happens when someone makes a mistake?",
+    "In a record-based system, those answers determine the structure beneath every screen. An identifier is not just a string. A status is not just a badge. Permissions are not just a hidden button. They are decisions about how the system should behave.",
+    "I try to make those decisions explicit early. A rough workflow diagram and a clear set of rules can save hours of redesign later. The interface gets easier to make once the rules stop moving."
+  ],
+  "published": true,
+  "status": "Draft"
+}

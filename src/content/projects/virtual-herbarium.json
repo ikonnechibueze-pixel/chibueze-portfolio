@@ -1,0 +1,36 @@
+{
+  "slug": "virtual-herbarium",
+  "index": "01",
+  "title": "Virtual Herbarium",
+  "shortTitle": "Virtual Herbarium",
+  "category": "Records · Workflows · Research",
+  "status": "System development",
+  "description": "Making specimen requests, identification, authentication and records part of one coherent institutional workflow.",
+  "question": "How do you connect a physical botanical specimen to a dependable digital record without losing its identity or history?",
+  "design": "A role-aware workflow linking student requests, taxonomist review, curator appointments, accession numbers, authentication and QR labels. The record is more than a page: it has a lifecycle and a traceable identity.",
+  "focus": [
+    "Separate physical accession numbers from digital record codes",
+    "Clear review, appointment and authentication states",
+    "Role-based permissions and audit history",
+    "QR labels tied to verified records"
+  ],
+  "technology": [
+    "React",
+    "TypeScript",
+    "Supabase",
+    "PostgreSQL",
+    "Vite"
+  ],
+  "accent": "blue",
+  "visualLabel": "SPECIMEN RECORD FLOW",
+  "steps": [
+    "Request",
+    "Review",
+    "Authenticate",
+    "Record"
+  ],
+  "reflection": "The difficult part is not displaying specimens. It is agreeing on what a specimen record means, who can change it, and when it becomes authoritative.",
+  "workType": "systems",
+  "published": true,
+  "coverImage": ""
+}

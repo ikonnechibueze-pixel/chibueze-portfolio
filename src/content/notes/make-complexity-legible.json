@@ -1,0 +1,15 @@
+{
+  "slug": "make-complexity-legible",
+  "title": "Making complex work legible",
+  "tag": "Design & communication",
+  "teaser": "Why software systems and visual design share the problem of clarity.",
+  "readTime": "3 min",
+  "visual": "layers",
+  "paragraphs": [
+    "Software and visual design look like different disciplines from the outside. I find they share a central problem: helping someone understand what matters and what to do next.",
+    "A system needs meaningful states and a predictable flow. A visual composition needs hierarchy, contrast and purposeful spacing. Both suffer when everything competes for attention.",
+    "I am interested in the point where structure becomes communication — when the decisions behind the work are felt as an experience that is easier to understand."
+  ],
+  "published": true,
+  "status": "Draft"
+}

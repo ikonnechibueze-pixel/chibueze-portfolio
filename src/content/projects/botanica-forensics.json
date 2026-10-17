@@ -1,0 +1,36 @@
+{
+  "slug": "botanica-forensics",
+  "index": "04",
+  "title": "BOTANICA FORENSICS",
+  "shortTitle": "Botanica Forensics",
+  "category": "Forensics · Investigation · Data",
+  "status": "Prototype development",
+  "description": "Exploring how botanical observations, reference sources and structured reports can fit into a careful investigative workflow.",
+  "question": "What does a botanical examination tool need to preserve when the evidence and its interpretation have different levels of certainty?",
+  "design": "A research-led interface connecting botanical inputs, reference lookups, examination notes and report generation while keeping the limits of automated identification visible.",
+  "focus": [
+    "Structured observations and report content",
+    "Reference-assisted identification",
+    "Clear uncertainty and provenance",
+    "Separation of evidence from interpretation"
+  ],
+  "technology": [
+    "React",
+    "TypeScript",
+    "Supabase",
+    "PlantNet",
+    "PDF generation"
+  ],
+  "accent": "amber",
+  "visualLabel": "INVESTIGATION FLOW",
+  "steps": [
+    "Observe",
+    "Compare",
+    "Document",
+    "Report"
+  ],
+  "reflection": "An answer is not necessarily evidence. Tools must help people preserve the distinction.",
+  "workType": "systems",
+  "published": true,
+  "coverImage": ""
+}
