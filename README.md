@@ -1,90 +1,55 @@
-# Chibueze Ikonne — Personal website (v0.1)
+# Chibueze Ikonne — personal website (v0.3)
 
-A complete, mobile-responsive portfolio built with **React, TypeScript and Vite**. The visual direction follows the supplied light, architectural, glass-panel reference — implemented as original HTML/CSS/SVG, not a screenshot pasted behind links.
+A custom-built React + Vite + TypeScript portfolio with a reference-led, architectural-glass dashboard. This release rebuilds the homepage geometry, surfaces, hero, profile card, capability cards, project artwork, and writing thumbnails from the supplied design reference. It is **real HTML/CSS/React**, not a screenshot positioned over links.
 
-## What's included
+## Project
 
-- Working navigation: Home, Work, Writing, About, Contact and a draft Privacy page
-- Four contextual case studies with status labels (no fictitious statistics or testimonials)
-- Selected-work carousel with previous/next buttons
-- Three clearly labelled draft notes
-- Responsive layout, keyboard-accessible navigation and reduced-motion support
-- Working light/dark appearance switch (saved locally)
-- Contact form that can post to Formspree **without running your own backend**
-- Email-app fallback when no Formspree ID is set but a contact email is provided
-- No phone number, street address, cookies, analytics or third-party trackers
-- Minimal original vector illustration assets, without invented app screenshots
+- Home: overview, capability cards, featured project carousel, writing previews, current focus and contact.
+- Work: project case-study index and individual case studies.
+- Writing: three **draft** articles (not fabricated publications).
+- About: working approach, principles, and tools.
+- Contact: built-in contact form and privacy page.
+- Light/dark theme toggle, responsive navigation, keyboard focus styles and reduced-motion support.
 
-## Run locally / in StackBlitz
+## Run locally
 
-Requires Node.js 20.19+ or 22.12+.
+1. `npm install`
+2. `npm run dev`
+3. Open the local URL printed by Vite.
 
-```bash
-npm install
-npm run dev
-```
+For a release build, run `npm run build`. This requires an environment that can install dependencies. TypeScript/JSX parsing was verified for this release, but the full dependency-backed build has **not** been verified in the packaging environment; use StackBlitz to run and visually inspect it before deploying.
 
-Open the address Vite prints (usually http://localhost:5173).
+## Updating the existing GitHub repository with `chibueze_portfolio_v03_github_update.zip`
 
-## Publish on Vercel (free domain)
+This is the easiest route if your repository already holds v0.2:
 
-1. Push the contents of this folder to a new GitHub repository.
-2. Import that repository into Vercel; it should recognize **Vite** automatically.
-3. Build command: `npm run build`; output directory: `dist`.
-4. Use the free `*.vercel.app` project domain until you choose to add a custom domain.
+1. Extract the update ZIP.
+2. On your GitHub repository, choose **Add file → Upload files**.
+3. Drag the **contents of the update folder** (`src/`, `public/`, `README.md`) to the upload area. GitHub should show nested paths like `src/App.tsx` and `public/mountain-avatar.jpg`.
+4. Commit directly to `main` with the message `Match approved portfolio design reference`.
+5. Re-open/refresh the StackBlitz GitHub import link and check desktop and mobile. If StackBlitz has cached the old GitHub snapshot, use its GitHub import again.
 
-Navigation uses hash routes (`#/work`, `#/about`, etc.), so no server rewrites are needed.
+The update ZIP has no hidden dotfiles, to avoid GitHub's browser upload restrictions. Do not delete existing `.gitignore` or commit any real `.env` secrets.
 
-## Activate the contact form
+## Contact
 
-Copy `.env.example` to `.env.local` for local development, or add the same variables in **Vercel → Project Settings → Environment Variables**.
+The default contact email is `Ikonnechibueze@gmail.com`. Without a `VITE_FORMSPREE_ID`, the contact form opens an email draft in the visitor's email app rather than claiming that a message was delivered. After configuring a real Formspree form, update your privacy note to match the actual service and data handling.
 
-**Option A — Recommended:** Create a free Formspree form, confirm its inbox address, then set:
+**Environment variables** (optional):
 
-```ini
-VITE_FORMSPREE_ID=your_actual_form_id
-VITE_CONTACT_EMAIL=your_public_professional_email@example.com
-```
+- `VITE_CONTACT_EMAIL` — contact address (defaults to email above)
+- `VITE_FORMSPREE_ID` — Formspree form ID (must be activated separately)
+- `VITE_GITHUB_URL` — professional GitHub profile URL
+- `VITE_LINKEDIN_URL` — professional LinkedIn profile URL
 
-Formspree sends submissions to the email you verify. You will not need Supabase, a database or your own API. Note that the submit endpoint must be reachable in production. Review Formspree's current free plan, spam controls and privacy terms before publishing. Your site has a honeypot, input lengths and client-side validation; reliable abuse prevention ultimately depends on the form provider, because a static site cannot enforce a private server-side rate limit.
+Do not put private credentials or service tokens in frontend Vite variables.
 
-**Option B — No form provider:** Only set `VITE_CONTACT_EMAIL`. The form will create a pre-filled email draft in the visitor's mail application; they must then send it. This works without running any service, but it is not a direct website submission.
+## Artwork disclosure
 
-**Option C — Not configured:** The preview shows the contact form but disables submission. This avoids a misleading “message sent” state. Configure A or B before publishing.
+- `architectural-canopy.jpg`, `mountain-avatar.jpg`, and the three small writing thumbnail JPGs were **cropped from the original reference screenshot supplied by the website owner**, exclusively as decorative art assets. They are not third-party stock photos and they are not full-page screenshot overlays.
+- `scene.svg` provides the custom vector atmospheric architecture backdrop.
+- The featured phone/app image is a handcrafted CSS/HTML **conceptual visualization**, not a claimed screenshot, live metric, or deployable feature of the underlying project. Replace it with actual application photography/screenshots when available.
 
-> `VITE_` variables are part of the public frontend bundle. Do **not** put API secrets or private email credentials in these variables. A Formspree form ID is not a secret.
+## Deployment
 
-## Link your profiles
-
-Optional variables:
-
-```ini
-VITE_GITHUB_URL=https://github.com/YOUR_HANDLE
-VITE_LINKEDIN_URL=https://www.linkedin.com/in/YOUR_HANDLE/
-```
-
-Leave empty until you know the exact URLs. The site will not show nonfunctional social icons.
-
-## Edit your content
-
-- `src/data.ts` — Project details, statuses, technologies and draft essays
-- `src/App.tsx` — Page copy, layout and interactions
-- `src/styles.css` — Responsive design, typography, components and themes
-- `public/scene.svg` — Hand-coded atmospheric architectural backdrop (no stock-photo dependency)
-- `public/favicon.svg` — Original site brand mark
-
-**Please review/approve all public claims and writing before deployment.** The content is an initial proposal based on the project details supplied in conversation. In particular, the four case-study status labels should always reflect reality, and the draft essays are not represented as previously published work.
-
-## Verification commands
-
-```bash
-npm run typecheck
-npm run build
-npm run preview
-```
-
-For a production contact form, send at least one real test message and confirm it arrives. Test on a narrow phone viewport and keyboard navigation before sharing your site.
-
-## Privacy & security notes
-
-The site keeps only the appearance preference in the browser's local storage. No analytics, user accounts or persistent database are added. Form submissions are processed by Formspree when enabled — its privacy policy and your eventual published privacy notice should accurately describe this. If you enable Formspree, ensure your site's public privacy note meets applicable requirements and links to the provider as appropriate. Static frontend validation does not replace service-side anti-spam or input safeguards.
+Import the existing GitHub repository into Vercel as a **Vite** project, build command `npm run build`, output folder `dist`. Choose the Vercel project name and generated `.vercel.app` domain independently of the repository's name (subject to availability). Publish only after testing links, forms, layout, content and mobile navigation.

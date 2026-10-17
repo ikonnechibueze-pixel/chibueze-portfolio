@@ -100,9 +100,9 @@ export type Note = {
 export const notes: Note[] = [
   {
     slug: 'design-the-rule-first',
-    title: 'Design the rule before the interface',
+    title: 'Designing for uncertainty',
     tag: 'Systems thinking',
-    teaser: 'The most consequential decisions in an application often happen before a screen exists.',
+    teaser: 'How I approach ambiguous problems in product design.',
     readTime: '3 min',
     visual: 'blueprint',
     paragraphs: [
@@ -113,9 +113,9 @@ export const notes: Note[] = [
   },
   {
     slug: 'useful-chart-test',
-    title: 'The useful chart test',
+    title: 'What makes a system feel simple?',
     tag: 'Data & analysis',
-    teaser: 'A dashboard should help someone notice or decide something, not simply show that data exists.',
+    teaser: 'Notes on complexity, mental models and good defaults.',
     readTime: '2 min',
     visual: 'horizon',
     paragraphs: [
@@ -126,9 +126,9 @@ export const notes: Note[] = [
   },
   {
     slug: 'make-complexity-legible',
-    title: 'Make complexity legible',
+    title: 'Building in public (again)',
     tag: 'Design & communication',
-    teaser: 'The same habits that clarify a workflow can also clarify a poster, presentation or product page.',
+    teaser: 'On learning, shipping and the messy middle.',
     readTime: '3 min',
     visual: 'layers',
     paragraphs: [

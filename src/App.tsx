@@ -3,13 +3,15 @@ import {
   ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpenText,
   Braces, Check, ChevronLeft, ChevronRight, CircleDot, Database, FileText,
   Fingerprint, Github, Globe2, Home, Layers3, Linkedin, Mail, MapPin,
-  Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun,
+  Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun, Leaf, CalendarDays, ClipboardCheck,
   Workflow, X,
 } from 'lucide-react';
 import { notes, projects, type Note, type Project } from './data';
 
 type Route = '/' | '/work' | '/writing' | '/about' | '/contact' | string;
 type Theme = 'light' | 'dark';
+
+const DEFAULT_CONTACT_EMAIL = 'Ikonnechibueze@gmail.com';
 
 const social = {
   github: import.meta.env.VITE_GITHUB_URL?.trim() || '',
@@ -107,18 +109,18 @@ function Hero() {
 
 function Introduction() {
   return <section className="intro glass" aria-label="Personal introduction">
-    <div className="intro-top"><Orb /><span className="intro-dots" aria-hidden="true">···</span></div>
-    <p className="intro-large">A builder exploring the intersection of systems, data and human experience.</p>
+    <div className="intro-top"><img className="orb-photo" src="/mountain-avatar.jpg" alt="Snow-covered mountains" /><span className="intro-dots" aria-hidden="true">···</span></div>
+    <p className="intro-large">Designer and builder exploring the intersection of systems, data and human experience.</p>
     <div className="small-rule" />
-    <p className="intro-secondary">I'm Chibueze Ikonne. I enjoy making thoughtful systems simpler to understand, safer to use and easier to maintain.</p>
+    <p className="intro-secondary">I'm Chibueze Ikonne, a developer and designer interested in how thoughtful systems can make complex things simpler.</p>
   </section>;
 }
 
 const capabilities = [
-  { title: 'Systems', label: '01', icon: Layers3, tone: 'blue', description: 'Turning complicated requirements into clear, usable workflows.' },
-  { title: 'Data', label: '02', icon: Database, tone: 'cyan', description: 'Giving information structure so useful patterns can emerge.' },
-  { title: 'Research', label: '03', icon: Search, tone: 'violet', description: 'Asking the better questions before deciding what to build.' },
-  { title: 'Visual', label: '04', icon: PenLine, tone: 'pink', description: 'Making complex ideas easier to see, read and navigate.' },
+  { title: 'Systems', label: '01', icon: Layers3, tone: 'blue', description: 'Turning complex ideas into clear, usable systems.' },
+  { title: 'Data', label: '02', icon: Database, tone: 'cyan', description: 'Finding meaning in data and shaping it into useful products.' },
+  { title: 'Research', label: '03', icon: Search, tone: 'violet', description: 'Asking better questions to design with context and clarity.' },
+  { title: 'Visual', label: '04', icon: PenLine, tone: 'pink', description: 'Crafting clean, intentional interfaces and visual stories.' },
 ];
 
 function CapabilityCards() {
@@ -148,15 +150,44 @@ function SystemSketch({ project, large = false }: { project: Project; large?: bo
   </div>;
 }
 
+function FeaturedDevice({ project }: { project: Project }) {
+  return <div className={`feature-device device-${project.accent}`} role="img" aria-label={`${project.title} conceptual mobile interface illustration; not a screenshot of the deployed application`}>
+    <span className="device-aurora device-aurora-one"/><span className="device-aurora device-aurora-two"/>
+    <div className="device-glass-back" aria-hidden="true">
+      <div className="device-back-head"><span>Overview</span><span>•••</span></div>
+      <div className="device-back-stat">Records <strong>—</strong></div>
+      <div className="device-back-spark"><i/><i/><i/><i/><i/><i/><i/><i/></div>
+      <div className="device-back-line"/><div className="device-back-line short"/>
+      <div className="device-back-bottom"><span>Recent activity</span><span>↗</span></div>
+    </div>
+    <div className="device-phone" aria-hidden="true">
+      <div className="device-speaker"/>
+      <div className="device-screen">
+        <div className="device-systembar"><span>9:41</span><span>◆ ▰</span></div>
+        <div className="device-welcome">Good morning <span>◌</span></div>
+        <strong className="device-greeting">{project.slug === 'virtual-herbarium' ? 'Specimen workspace' : 'Your workspace'}</strong>
+        <div className="device-purplebar"><span>{project.slug === 'virtual-herbarium' ? 'Virtual Herbarium' : project.shortTitle}</span><ArrowUpRight size={11}/></div>
+        <div className="device-services">
+          <div><Leaf size={17}/><small>Records</small></div><div><ClipboardCheck size={17}/><small>Review</small></div><div><CalendarDays size={17}/><small>Schedule</small></div>
+        </div>
+        <div className="device-recent-title">Recent activity <span>•••</span></div>
+        <div className="device-record"><span className="device-record-icon">✳</span><div><b>{project.steps[0]}</b><small>Workflow started</small></div><span className="device-record-status">Active</span></div>
+        <div className="device-record"><span className="device-record-icon second">✓</span><div><b>{project.steps[1]}</b><small>Review in progress</small></div><span className="device-record-status">Open</span></div>
+      </div>
+    </div>
+    <span className="device-glare"/>
+  </div>;
+}
+
 function FeaturedWork() {
   const [selected, setSelected] = useState(0);
   const project = projects[selected];
   const show = (dir: number) => setSelected((current) => (current + dir + projects.length) % projects.length);
   return <section className="featured glass" aria-labelledby="featured-title">
-    <div className="panel-heading"><div><h2 id="featured-title">Selected work</h2><p>A few projects where the important work happens beneath the surface.</p></div><AnchorButton to="/work" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
+    <div className="panel-heading"><div><h2 id="featured-title">Selected Work</h2><p>A few projects where I’ve turned complex problems into simple, useful experiences.</p></div><AnchorButton to="/work" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
     <div className="feature-content" key={project.slug}>
       <div className="feature-text"><span className="feature-index">{project.index} <span className="feature-category">/ {project.category}</span></span><h3>{project.title}</h3><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read case study <ArrowRight size={15}/></AnchorButton></div>
-      <SystemSketch project={project} />
+      <FeaturedDevice project={project} />
     </div>
     <div className="feature-controls" aria-label="Selected work carousel controls">
       <button aria-label="Previous project" onClick={() => show(-1)}><ChevronLeft size={19} /></button><span>{selected + 1} <span className="divider">/</span> {projects.length}</span><button aria-label="Next project" onClick={() => show(1)}><ChevronRight size={19} /></button>
@@ -174,16 +205,16 @@ function NoteArtwork({ type }: { type: Note['visual'] }) {
 
 function NotesPanel() {
   return <section className="notes-panel glass" aria-labelledby="notes-heading">
-    <div className="panel-heading"><div><h2 id="notes-heading">Notes & writing</h2></div><AnchorButton to="/writing" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
+    <div className="panel-heading"><div><h2 id="notes-heading">Notes & Writing</h2></div><AnchorButton to="/writing" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
     <div className="note-list">{notes.map((note) => <a href={`#/writing/${note.slug}`} className="note-item" key={note.slug}>
-      <NoteArtwork type={note.visual} /><div><span className="note-tag">{note.tag}</span><h3>{note.title}</h3><p>{note.teaser}</p></div><ArrowUpRight size={15} className="note-arrow" aria-hidden="true" />
+      <NoteArtwork type={note.visual} /><div className="note-copy"><h3>{note.title}</h3><p>{note.teaser}</p></div><span className="note-date">Draft</span>
     </a>)}</div>
-    <span className="panel-footnote">Short thoughts from the workbench · Draft essays</span>
+    
   </section>;
 }
 
 function AboutTeaser() {
-  return <section className="about-teaser glass"><div className="teaser-orbit" aria-hidden="true"/><h2>A bit about me</h2><p>I like working between disciplines — connecting research, system design, data and visual thinking to make useful things.</p><div className="facts"><div><MapPin size={20} /><span>Based in<br/><strong>Richmond Hill, ON</strong></span></div><div><Globe2 size={20}/><span>Projects across<br/><strong>different disciplines</strong></span></div></div></section>;
+  return <section className="about-teaser glass"><div className="teaser-orbit" aria-hidden="true"/><h2>A bit about me</h2><p>I’m a multidisciplinary builder who enjoys connecting research, product thinking and design to create meaningful digital experiences.</p><div className="facts"><div><MapPin size={20} /><span>Based in<br/><strong>Richmond Hill, ON</strong></span></div><div><Globe2 size={20}/><span>Projects across<br/><strong>different disciplines</strong></span></div></div></section>;
 }
 
 function FocusTeaser() {
@@ -205,7 +236,7 @@ function isSecureExternalUrl(value: string): boolean {
 }
 
 function SocialLinks() {
-  const mail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || '';
+  const mail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || DEFAULT_CONTACT_EMAIL;
   return <div className="socials" aria-label="Social links">
     {isSecureExternalUrl(social.linkedin) && <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={19}/></a>}
     {isSecureExternalUrl(social.github) && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={19}/></a>}
@@ -277,7 +308,7 @@ function AboutPage() {
 }
 
 const FORMSPREE_ID = (import.meta.env.VITE_FORMSPREE_ID || '').trim();
-const CONTACT_EMAIL = (import.meta.env.VITE_CONTACT_EMAIL || '').trim();
+const CONTACT_EMAIL = (import.meta.env.VITE_CONTACT_EMAIL || '').trim() || DEFAULT_CONTACT_EMAIL;
 const hasFormspree = /^[a-zA-Z0-9]{5,30}$/.test(FORMSPREE_ID);
 const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONTACT_EMAIL);
 
