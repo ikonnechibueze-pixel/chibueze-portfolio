@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpenText,
   Braces, Check, ChevronLeft, ChevronRight, CircleDot, Database, FileText,
@@ -394,72 +394,127 @@ function AboutPage() {
     <div className="about-cta glass"><div><span className="overline">KEEP GOING</span><h2>Want to see this thinking in practice?</h2></div><AnchorButton to="/work" className="button button-dark" icon={false}>Explore case studies <ArrowRight size={16}/></AnchorButton></div><Footer/></main>;
 }
 
-const FORMSPREE_ID = (import.meta.env.VITE_FORMSPREE_ID || '').trim();
 const CONTACT_EMAIL = (site.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || '').trim() || DEFAULT_CONTACT_EMAIL;
-const hasFormspree = /^[a-zA-Z0-9]{5,30}$/.test(FORMSPREE_ID);
+const WEB3FORMS_ACCESS_KEY = (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'b644c0ce-8180-4941-96d8-314027fdc25c').trim();
+const hasWeb3Forms = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(WEB3FORMS_ACCESS_KEY);
 const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONTACT_EMAIL);
+type ContactStatus = 'idle' | 'sending' | 'success' | 'error' | 'draft';
+
+function contactFields(form: HTMLFormElement) {
+  const data = new FormData(form);
+  return {
+    name: String(data.get('name') || '').trim(),
+    email: String(data.get('email') || '').trim(),
+    topic: String(data.get('topic') || '').trim(),
+    message: String(data.get('message') || '').trim(),
+    botcheck: data.get('botcheck') !== null,
+  };
+}
+
+function contactMailto(details: ReturnType<typeof contactFields>) {
+  const subject = details.topic ? `Portfolio inquiry — ${details.topic}` : 'Portfolio inquiry';
+  const body = [
+    details.name ? `Name: ${details.name}` : 'Name:',
+    details.email ? `Reply-to email: ${details.email}` : 'Reply-to email:',
+    '',
+    details.message || 'Message:',
+  ].join('\n');
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
 
 function ContactForm() {
-  const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<ContactStatus>('idle');
   const [feedback, setFeedback] = useState('');
-  const isReady = hasFormspree || hasEmail;
+
+  function openDraft() {
+    if (!hasEmail || !formRef.current || status === 'sending') return;
+    window.location.href = contactMailto(contactFields(formRef.current));
+    setStatus('draft');
+    setFeedback('An email draft should open in your email app. Review it and press Send there; opening a draft does not send the message.');
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isReady || state === 'sending') return;
+    if (status === 'sending') return;
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
-    const data = new FormData(form);
-    const name = String(data.get('name') || '').trim();
-    const email = String(data.get('email') || '').trim();
-    const subject = String(data.get('subject') || '').trim();
-    const message = String(data.get('message') || '').trim();
-    if (String(data.get('website') || '').trim()) { setState('success'); setFeedback('Message received.'); form.reset(); return; }
-    if (!name || !email || !message || name.length > 120 || email.length > 254 || message.length > 4000) {
-      setState('error'); setFeedback('Please check the message fields and try again.'); return;
-    }
-    setState('sending'); setFeedback('');
-    if (!hasFormspree && hasEmail) {
-      const body = `From: ${name}\nReply to: ${email}\n\n${message}`;
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject || 'Portfolio inquiry')}&body=${encodeURIComponent(body)}`;
-      setState('success'); setFeedback('Your email app should open with a ready-to-send message. Please send it from there.');
+    const { name, email, topic, message, botcheck } = contactFields(form);
+
+    // Web3Forms accepts botcheck=true as a hidden spam trap; never send this input as content.
+    if (botcheck) {
+      setStatus('error');
+      setFeedback('Unable to submit this form. Please use the direct email option below.');
       return;
     }
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !topic || !message || name.length > 120 || email.length > 254 || message.length > 4000) {
+      setStatus('error');
+      setFeedback('Please check your name, email, topic and message before sending.');
+      return;
+    }
+    if (!hasWeb3Forms) {
+      setStatus('error');
+      setFeedback('Online submission is not configured. Please use the direct email option below.');
+      return;
+    }
+
+    setStatus('sending');
+    setFeedback('');
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 15000);
     try {
-      const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ name, email, subject: subject || 'Portfolio inquiry', message, _gotcha: '' }),
+        signal: controller.signal,
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          from_name: 'Chibueze Ikonne — Portfolio',
+          subject: `Portfolio inquiry — ${topic}`,
+          name,
+          email,
+          topic,
+          message,
+          botcheck: false,
+        }),
       });
-      if (!response.ok) throw new Error('Message service could not accept the request.');
-      setState('success'); setFeedback('Your message has been sent. Thank you for reaching out.'); form.reset();
+      const result: { success?: boolean; message?: string } = await response.json();
+      if (!response.ok || result.success !== true) throw new Error('Submission not accepted');
+      setStatus('success');
+      setFeedback('Thank you — your message was submitted successfully. I’ll respond to the email address you provided.');
+      form.reset();
     } catch {
-      setState('error'); setFeedback('The message did not go through. Please try again in a moment.');
+      setStatus('error');
+      setFeedback('Your message could not be submitted right now. Nothing was confirmed as sent. You can retry or open a prefilled email draft below.');
+      // Inputs are intentionally preserved for the visitor to retry or email instead.
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   }
 
-  return <form className="contact-form" onSubmit={submit} noValidate={false}>
+  return <form ref={formRef} className="contact-form" onSubmit={submit} onInput={() => { if (status !== 'idle' && status !== 'sending') { setStatus('idle'); setFeedback(''); } }}>
     <div className="form-row"><label>YOUR NAME<input name="name" autoComplete="name" placeholder="How should I address you?" maxLength={120} required /></label><label>EMAIL ADDRESS<input name="email" type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} required /></label></div>
-    <label>WHAT IS THIS ABOUT?<select name="subject" defaultValue=""><option value="" disabled>Choose a topic</option>{(site.contactTopics || []).map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></label>
+    <label>WHAT IS THIS ABOUT?<select name="topic" defaultValue="" required><option value="" disabled>Choose a topic</option>{(site.contactTopics || []).map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select></label>
     <label>MESSAGE<textarea name="message" rows={6} placeholder="Tell me a little about the problem, the context, and what you have in mind." maxLength={4000} required /></label>
-    <div className="honey-field" aria-hidden="true"><label htmlFor="website">Leave this field blank</label><input type="text" tabIndex={-1} autoComplete="off" name="website" id="website" /></div>
-    <div className="form-bottom"><p>Your details are used to respond to this inquiry. See the <a href="#/privacy">privacy note</a>. No phone number required.</p><button className="button button-dark" disabled={!isReady || state === 'sending'} type="submit">{state === 'sending' ? 'Sending…' : hasFormspree ? 'Send message' : 'Open email draft'}<ArrowRight size={16}/></button></div>
-    {!isReady && <p className="form-setup" role="status">The contact form is being connected. Contact details will appear here once configured.</p>}
-    {feedback && <p className={`form-feedback ${state}`} role="status" aria-live="polite">{feedback}</p>}
+    <div className="honey-field" aria-hidden="true"><label htmlFor="contact-botcheck">Leave this blank</label><input type="checkbox" tabIndex={-1} autoComplete="off" name="botcheck" id="contact-botcheck" /></div>
+    <div className="form-bottom"><p>Your information is forwarded via Web3Forms so I can reply. See the <a href="#/privacy">privacy note</a>. No phone number needed.</p><button className="button button-dark" disabled={!hasWeb3Forms || status === 'sending'} type="submit">{status === 'sending' ? 'Sending…' : 'Send message'}<ArrowRight size={16} aria-hidden="true"/></button></div>
+    {feedback && <p className={`form-feedback ${status}`} role="status" aria-live="polite">{feedback}</p>}
+    {!hasWeb3Forms && <p className="form-setup" role="status">The online form is not configured yet. Direct email is still available.</p>}
+    {hasEmail && <div className="email-alternative"><div><span className="overline">PREFER EMAIL?</span><p>Send a message directly to <a className="direct-email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, or prepare a draft using the details above.</p></div><button type="button" className="button button-ghost email-draft-button" onClick={openDraft} disabled={status === 'sending'}>Open email draft <Mail size={16} aria-hidden="true"/></button></div>}
   </form>;
 }
 
 function ContactPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="HAVE A PROBLEM THAT NEEDS STRUCTURE?" title="Start with a conversation." body={site.contactIntro} icon={<Send size={25} />} />
     <div className="contact-layout"><section className="contact-main glass"><div className="section-head"><span className="overline">SEND AN INQUIRY</span><h2>What are you working on?</h2><p>You don't need a perfectly written brief. A few useful details are enough to start.</p></div><ContactForm /></section>
-      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start as good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">FIND ME ELSEWHERE</span><SocialLinks/><p className="social-hint">Professional profiles appear here when they are connected. No phone number is published.</p></div></aside>
+      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start as good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">DIRECT CONTACT</span><a className="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}><Mail size={18} aria-hidden="true" />{CONTACT_EMAIL}</a><SocialLinks/><p className="social-hint">If the form service is unavailable, you can always email me directly. No phone number is published.</p></div></aside>
     </div><Footer/></main>;
 }
 
 function PrivacyPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="ABOUT YOUR INFORMATION" title="A straightforward privacy note." body="This site is designed to collect as little information as possible. Here is what the current version does." icon={<ShieldCheck size={25}/>} />
     <section className="privacy-body glass"><span className="overline">HOW THIS SITE WORKS</span><h2>Browsing</h2><p>There are no user accounts, advertising trackers or site analytics in this version. The appearance preference (light or dark) may be saved in your browser's local storage. Browsing public case studies does not require you to submit personal information.</p>
-    <h2>Contact messages</h2><p>If a direct contact form is enabled, the name, email address, selected topic and message you choose to submit are sent to Formspree, a third-party form service, so the owner can receive and respond to your inquiry. Formspree may process technical information needed to deliver and protect the service. If the email fallback is used instead, your email application handles sending your message. Do not include sensitive or confidential information in your first message.</p>
+    <h2>Contact messages</h2><p>If you select Send message, the name, email address, selected topic and message you provide are transmitted to Web3Forms, a third-party form processing service, to forward your inquiry to my email inbox. Web3Forms may process technical connection data for service delivery and abuse prevention. Web3Forms states that its infrastructure is hosted in the United States and that it periodically deletes server logs. When you use direct email instead, your email provider and mine process the message. I do not operate a separate database for these inquiries. Please do not include sensitive or confidential details in an initial message.</p>
     <h2>Fonts and external links</h2><p>The site may request typefaces from Google Fonts, which can involve a connection to Google's servers. Optional professional-profile links lead to external websites with their own privacy practices.</p>
     <h2>Your choices</h2><p>You do not need to use the contact form. You can clear the site's stored appearance preference through your browser settings. For questions about a message you sent or to request that the site owner delete it, use the available professional contact channel.</p>
     <div className="privacy-disclaimer"><strong>Publication check:</strong> This is a draft description of the current implementation, not a legal opinion. Before publishing, verify the actual third-party services, their terms and the final retention/deletion practices.</div></section><Footer/></main>;

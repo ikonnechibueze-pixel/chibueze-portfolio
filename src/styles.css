@@ -842,3 +842,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 :root[data-theme='dark'] .work-filter.selected { color: #fff; background: #6666d1; }
 :root[data-theme='dark'] .work-empty h2 { color: #f0f4ff; }
 @media(max-width:620px){ .work-filter{font-size:11px;padding:8px 11px;min-height:36px;} .work-filters{gap:4px;padding:9px;} .work-empty{padding:26px;} }
+
+
+/* v0.6 — Contact delivery options */
+.email-alternative {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 20px; margin-top: 3px;
+  border: 1px solid rgba(121,144,195,.26); border-radius: 15px;
+  background: rgba(255,255,255,.24);
+}
+.email-alternative .overline { display:block; margin-bottom: 7px; }
+.email-alternative p { font-size: 12px; line-height: 1.6; color: #627591; margin: 0; max-width: 390px; }
+.direct-email { font-weight: 750; color: #4e51a9; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.email-draft-button { white-space: nowrap; border: 1px solid rgba(124,149,194,.26); }
+.contact-email-link { display: flex; gap: 9px; align-items: center; margin-top: 22px; text-decoration: none; color: #454fad; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.contact-email-link:hover,.direct-email:hover { color: #5655db; }
+.form-feedback.draft { color: #4b607e; }
+:root[data-theme='dark'] .email-alternative { background: rgba(255,255,255,.045); border-color: rgba(200,211,243,.2); }
+:root[data-theme='dark'] .email-alternative p { color: #bdc9df; }
+:root[data-theme='dark'] .direct-email,:root[data-theme='dark'] .contact-email-link { color: #bcc0ff; }
+:root[data-theme='dark'] .direct-email:hover,:root[data-theme='dark'] .contact-email-link:hover { color: #e1dcff; }
+:root[data-theme='dark'] .form-feedback.draft { color: #d0dcf3; }
+@media (max-width: 620px) {
+  .email-alternative { flex-direction: column; align-items: stretch; }
+  .email-draft-button { width: 100%; justify-content: center; }
+}
