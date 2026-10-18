@@ -1,22 +1,24 @@
-# Chibueze Ikonne — Personal Website (v0.5)
+# Chibueze Ikonne — Personal Website (v0.7)
 
-This is a React/Vite/TypeScript portfolio with GitHub-backed editable content.
+A responsive React/Vite/TypeScript portfolio built around systems, data, research, and visual communication, with content stored as editable JSON files in `src/content`.
 
-**New in 0.5:** dark mode sidebar and contact contrast fixes, category-filtered Work section, research and visual case-study drafts, and a Pages CMS content schema.
-
-> The two new non-software case studies are summaries pending editorial review. Publish only approved images and confirmed claims.
-
-See **CONTENT_EDITING.md** for guidance on updating projects, articles, contact topics and site text without modifying React code.
-
-## Running the site
+## Run and verify
 
 ```sh
 npm install
 npm run dev
+npm run check:content
+npm run build
 ```
 
-To verify a production build, run `npm run build`.
+The production build runs content validation, TypeScript checking, and Vite bundling. You can edit the site via GitHub Desktop; an optional Pages CMS config is included but not activated.
 
-No backend or database is required. Your contact form currently uses a `mailto:` fallback unless a valid Formspree form ID is configured via `VITE_FORMSPREE_ID`. Before going live, verify the service configuration and privacy note.
+## Contact
 
-**Security:** Store no secrets in `src/content` or any committed frontend file. The CMS integration is not live until you choose to authorize the external GitHub app. No private `/admin` endpoint is added to the site.
+Web3Forms is the primary contact option. A visible clickable email address and a prefilled email draft are fallback paths. The access key is a Web3Forms **public frontend key**, not an email password. Confirm delivery on your final live domain before sharing the site. See `WEB3FORMS_CONTACT_SETUP.md`.
+
+## Launch preparation
+
+**Read `LAUNCH_REVIEW.md` before going public.** Several editorial items remain for approval; the draft notes are currently visible, and concept art is not a screenshot of an actual application. Vercel Hobby is restricted to non-commercial use—hosting choice should reflect the site's intended commercial or non-commercial purpose.
+
+See `CONTENT_EDITING.md` for content updates and `.pages.yml` for the optional CMS schema. Never commit private keys, passwords, mailing addresses, or confidential user data.

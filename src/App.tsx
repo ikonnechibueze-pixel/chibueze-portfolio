@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpenText,
   Braces, Check, ChevronLeft, ChevronRight, CircleDot, Database, FileText,
@@ -172,6 +172,7 @@ function FeaturedDevice({ project }: { project: Project }) {
       </div>
     </div>
     <span className="device-glare"/>
+    <span className="concept-label">Concept illustration · not a live screenshot</span>
   </div>;
 }
 
@@ -233,12 +234,12 @@ function isSecureExternalUrl(value: string): boolean {
   try { const url = new URL(value); return url.protocol === 'https:'; } catch { return false; }
 }
 
-function SocialLinks() {
+function SocialLinks({ includeEmail = true }: { includeEmail?: boolean }) {
   const mail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || DEFAULT_CONTACT_EMAIL;
   return <div className="socials" aria-label="Social links">
     {isSecureExternalUrl(social.linkedin) && <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={19}/></a>}
     {isSecureExternalUrl(social.github) && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={19}/></a>}
-    {mail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) && <a href={`mailto:${mail}`} aria-label="Email"><Mail size={19}/></a>}
+    {includeEmail && mail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) && <a href={`mailto:${mail}`} aria-label="Email"><Mail size={19}/></a>}
   </div>;
 }
 
@@ -507,7 +508,7 @@ function ContactForm() {
 function ContactPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="HAVE A PROBLEM THAT NEEDS STRUCTURE?" title="Start with a conversation." body={site.contactIntro} icon={<Send size={25} />} />
     <div className="contact-layout"><section className="contact-main glass"><div className="section-head"><span className="overline">SEND AN INQUIRY</span><h2>What are you working on?</h2><p>You don't need a perfectly written brief. A few useful details are enough to start.</p></div><ContactForm /></section>
-      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start as good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">DIRECT CONTACT</span><a className="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}><Mail size={18} aria-hidden="true" />{CONTACT_EMAIL}</a><SocialLinks/><p className="social-hint">If the form service is unavailable, you can always email me directly. No phone number is published.</p></div></aside>
+      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start with good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">DIRECT CONTACT</span><a className="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}><Mail size={18} aria-hidden="true" />{CONTACT_EMAIL}</a>{(isSecureExternalUrl(social.github) || isSecureExternalUrl(social.linkedin)) && <SocialLinks includeEmail={false} />}<p className="social-hint">If the form service is unavailable, you can always email me directly. No phone number is published.</p></div></aside>
     </div><Footer/></main>;
 }
 
@@ -530,10 +531,19 @@ export default function App() {
     try { return localStorage.getItem('ci-appearance') === 'dark' ? 'dark' : 'light'; } catch { return 'light'; }
   });
   useEffect(() => {
-    const update = () => { setRoute(readRoute()); window.scrollTo({ top: 0, behavior: 'instant' }); };
+    const update = () => setRoute(readRoute());
     window.addEventListener('hashchange', update);
     return () => window.removeEventListener('hashchange', update);
   }, []);
+  // Reset scroll *after* the new route renders, not before React updates the DOM.
+  useLayoutEffect(() => { window.scrollTo(0, 0); }, [route]);
+  useEffect(() => {
+    const baseTitle = 'Chibueze Ikonne';
+    const project = projects.find((item) => `/work/${item.slug}` === route);
+    const note = notes.find((item) => `/writing/${item.slug}` === route);
+    const label = project?.title ?? note?.title ?? ({ '/': 'Systems, Data & Design', '/work': 'Selected Work', '/writing': 'Writing', '/about': 'About', '/contact': 'Contact', '/privacy': 'Privacy' } as Record<string, string>)[route] ?? 'Page not found';
+    document.title = `${label} — ${baseTitle}`;
+  }, [route]);
   useEffect(() => { document.documentElement.dataset.theme = theme; try { localStorage.setItem('ci-appearance', theme); } catch { /* Storage may be disabled. */ } }, [theme]);
   const page = useMemo(() => {
     if (route === '/' || route === '') return <HomePage />;
