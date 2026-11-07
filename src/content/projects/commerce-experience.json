@@ -1,0 +1,37 @@
+{
+  "slug": "commerce-experience",
+  "index": "08",
+  "title": "Commerce Interface & Product Discovery",
+  "shortTitle": "Commerce Interface",
+  "category": "Web application · Product discovery · Visual",
+  "status": "Interface design case study",
+  "description": "Developing a responsive commerce interface where product discovery, categorization and clear purchase actions work together.",
+  "question": "How can an online catalogue make product comparison and action easy without overwhelming visitors?",
+  "design": "Designed a product-card system with clear grouping, imagery, pricing, and accessible action affordances. The portfolio image is a cropped real catalogue interface rather than an advertisement for the original store.",
+  "focus": [
+    "Product-card hierarchy and readability",
+    "Category discovery without unnecessary complexity",
+    "Clear call-to-action patterns and spacing",
+    "Responsive visual composition"
+  ],
+  "technology": [
+    "React",
+    "Vite",
+    "Interface design",
+    "Product catalogue"
+  ],
+  "accent": "amber",
+  "visualLabel": "COMMERCE UI · SCREENSHOT",
+  "steps": [
+    "Discover",
+    "Compare",
+    "Select",
+    "Explore"
+  ],
+  "reflection": "Commercial interfaces should make products easier to evaluate, not simply fill the page with buttons.",
+  "workType": "visual",
+  "published": true,
+  "coverImage": "/media/real-commerce.jpg",
+  "coverAlt": "Cropped real commerce product-card screenshot showing product photographs, titles, prices and calls to action without the business header",
+  "coverKind": "real"
+}

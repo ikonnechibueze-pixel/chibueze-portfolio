@@ -32,5 +32,7 @@
   "reflection": "The difficult part is not displaying specimens. It is agreeing on what a specimen record means, who can change it, and when it becomes authoritative.",
   "workType": "systems",
   "published": true,
-  "coverImage": ""
+  "coverImage": "/media/real-herbarium.jpg",
+  "coverAlt": "A cropped real screenshot of the Virtual Herbarium public landing page, featuring botanical imagery and an authentication workflow",
+  "coverKind": "real"
 }

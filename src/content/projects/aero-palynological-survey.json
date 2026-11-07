@@ -1,0 +1,36 @@
+{
+  "slug": "aero-palynological-survey",
+  "index": "07",
+  "title": "Aero-Palynological Survey — University of Uyo",
+  "shortTitle": "Aero-Palynological Survey",
+  "category": "Published research · Palynology · 2021",
+  "status": "Co-authored scholarly publication",
+  "description": "Co-authored a 2021 research article documenting an aero-palynological survey of the University of Uyo campuses.",
+  "question": "How can airborne pollen research be recorded and communicated in a form that other researchers can review?",
+  "design": "This selected publication demonstrates participation in collaborative scientific writing and the communication of botanical research. The editorial preview here reproduces verified bibliographic details, not the original journal page or unverified research findings.",
+  "focus": [
+    "Co-authored article published in a scientific journal",
+    "Clear research context and bibliographic attribution",
+    "Respecting the distinction between citation details and access to the full paper",
+    "No invented methodology, study results, or citation metrics"
+  ],
+  "technology": [
+    "Aero-palynology",
+    "Botanical research",
+    "Scientific communication"
+  ],
+  "accent": "mint",
+  "visualLabel": "PUBLICATION · EDITORIAL PREVIEW",
+  "steps": [
+    "Research",
+    "Document",
+    "Review",
+    "Publish"
+  ],
+  "reflection": "Scientific communication needs accurate attribution and evidence, not just an attractive paper preview.",
+  "workType": "research",
+  "published": true,
+  "coverImage": "/media/concept-research-paper.png",
+  "coverAlt": "Editorially typeset bibliographic preview of the 2021 coauthored University of Uyo aero-palynological survey publication, not a scan of the journal",
+  "coverKind": "editorial"
+}

@@ -32,5 +32,7 @@
   "reflection": "A useful repository needs two things at once: information people can find and boundaries they can trust.",
   "workType": "systems",
   "published": true,
-  "coverImage": ""
+  "coverImage": "/media/concept-repository-ui.png",
+  "coverAlt": "Brand-neutral conceptual interface of an academic project repository with example search records and access requests",
+  "coverKind": "concept"
 }

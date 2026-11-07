@@ -32,5 +32,7 @@
   "reflection": "An answer is not necessarily evidence. Tools must help people preserve the distinction.",
   "workType": "systems",
   "published": true,
-  "coverImage": ""
+  "coverImage": "/media/concept-specimen-detail.png",
+  "coverAlt": "Illustrative botanical specimen-record design concept showing distinct accession and record identities",
+  "coverKind": "concept"
 }

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, 
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookOpenText,
   Braces, Check, ChevronLeft, ChevronRight, CircleDot, Database, FileText,
-  Fingerprint, Github, Globe2, Home, Layers3, Linkedin, Mail, MapPin,
+  Fingerprint, Github, Globe2, Home, Layers3, Mail, MapPin,
   Menu, Moon, Palette, PenLine, Search, Send, ShieldCheck, Sparkles, Sun, Leaf, CalendarDays, ClipboardCheck, Compass, Blocks, ScanSearch, ChartNoAxesCombined, LockKeyhole, Rocket,
   Workflow, X,
 } from 'lucide-react';
@@ -15,7 +15,6 @@ const DEFAULT_CONTACT_EMAIL = 'Ikonnechibueze@gmail.com';
 
 const social = {
   github: site.githubUrl?.trim() || import.meta.env.VITE_GITHUB_URL?.trim() || '',
-  linkedin: site.linkedinUrl?.trim() || import.meta.env.VITE_LINKEDIN_URL?.trim() || '',
 };
 
 function readRoute(): Route {
@@ -186,7 +185,12 @@ function FeaturedWork() {
     <div className="panel-heading"><div><h2 id="featured-title">Selected Work</h2><p>A few projects where I’ve turned complex problems into simple, useful experiences.</p></div><AnchorButton to="/work" className="text-pill">View all <ArrowRight size={13} /></AnchorButton></div>
     <div className="feature-content" key={project.slug}>
       <div className="feature-text"><span className="feature-index">{project.index} <span className="feature-category">/ {project.category}</span></span><h3>{project.title}</h3><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read case study <ArrowRight size={15}/></AnchorButton></div>
-      <FeaturedDevice project={project} />
+      {project.coverImage?.startsWith('/media/') ? (
+        <figure className="feature-screenshot">
+          <img src={project.coverImage} alt={project.coverAlt || `${project.title} project screenshot`} loading="lazy" />
+          <figcaption>{project.coverKind === 'concept' ? 'Interface concept · illustrative' : project.coverKind === 'editorial' ? 'Editorial preview · not an original paper scan' : 'Real project screenshot'}</figcaption>
+        </figure>
+      ) : <FeaturedDevice project={project} />}
     </div>
     <div className="feature-controls" aria-label="Selected work carousel controls">
       <button aria-label="Previous project" onClick={() => show(-1)}><ChevronLeft size={19} /></button><span>{selected + 1} <span className="divider">/</span> {featuredProjects.length}</span><button aria-label="Next project" onClick={() => show(1)}><ChevronRight size={19} /></button>
@@ -237,14 +241,13 @@ function isSecureExternalUrl(value: string): boolean {
 function SocialLinks({ includeEmail = true }: { includeEmail?: boolean }) {
   const mail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || DEFAULT_CONTACT_EMAIL;
   return <div className="socials" aria-label="Social links">
-    {isSecureExternalUrl(social.linkedin) && <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={19}/></a>}
     {isSecureExternalUrl(social.github) && <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={19}/></a>}
     {includeEmail && mail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) && <a href={`mailto:${mail}`} aria-label="Email"><Mail size={19}/></a>}
   </div>;
 }
 
 function Footer() {
-  return <footer className="footer"><span>© {new Date().getFullYear()} Chibueze Ikonne</span><span>Thoughtfully designed. Built with intention.</span><div className="footer-links"><a href="#/privacy">Privacy</a><button type="button" className="footer-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Back to top ↑</button></div></footer>;
+  return <footer className="footer"><span>© {new Date().getFullYear()} Chibueze Ikonne</span><span>Thoughtfully designed. Built with intention.</span><div className="footer-links">{isSecureExternalUrl(social.github) && <a href={social.github} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={12} aria-hidden="true" /></a>}<a href="#/privacy">Privacy</a><button type="button" className="footer-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Back to top ↑</button></div></footer>;
 }
 
 function HomePage() {
@@ -264,7 +267,7 @@ function ProjectArtwork({ project, large = false }: { project: Project; large?: 
   // Only CMS-managed images from our own public media folder are accepted.
   const safeCover = project.coverImage?.startsWith('/media/') ? project.coverImage : '';
   return safeCover
-    ? <img className={`project-cover${large ? ' project-cover-large' : ''}`} src={safeCover} alt={`${project.title} project preview`} loading="lazy" />
+    ? <img className={`project-cover${large ? ' project-cover-large' : ''}`} src={safeCover} alt={project.coverAlt || `${project.title} project screenshot`} loading="lazy" />
     : <SystemSketch project={project} large={large} />;
 }
 function WorkPage() {
@@ -289,7 +292,16 @@ function ProjectDetail({ project }: { project: Project }) {
 }
 
 function WritingPage() {
-  return <main id="main-content" className="main inner-page"><PageIntro index="03" kicker="NOTES FROM THE WORKBENCH" title="Thinking, in progress." body="Small essays about systems, data, research and making complicated work understandable. These are draft notes, not dated publications." icon={<BookOpenText size={25}/>} />
+  return <main id="main-content" className="main inner-page"><PageIntro index="03" kicker="NOTES FROM THE WORKBENCH" title="Thinking, in progress." body="Published research and working notes about systems, data and making complicated work understandable. The essays below remain drafts, not journal publications." icon={<BookOpenText size={25}/>} />
+    <section className="publication-feature glass" aria-labelledby="publication-feature-title">
+      <div className="publication-feature-copy"><span className="overline">RESEARCH / SELECTED PUBLICATION · 2021</span><h2 id="publication-feature-title">Research belongs here too.</h2>
+        <p><strong>A preliminary aero-palynological survey of University of Uyo campuses, Uyo, South Nigeria.</strong> Co-authored by E. D. Anwana, C. M. Ikonne, F. O. Ogbemudia, L. B. Ajikah, B. C. Essien and K. F. Etim.</p>
+        <p className="publication-citation">World Journal of Applied Science &amp; Technology, 13(2), 140–147 (2021).</p>
+        <AnchorButton to="/work/aero-palynological-survey" className="small-button">View the publication context <ArrowRight size={15}/></AnchorButton>
+        <span className="publication-disclaimer">Editorial visualization of bibliographic details, not a screenshot of the original paper.</span>
+      </div>
+      <img src="/media/concept-research-paper.png" alt="Editorial preview of the 2021 coauthored aero-palynological survey publication citation" loading="lazy"/>
+    </section>
     <div className="writing-grid">{notes.map((note, index) => <a className="writing-card glass" href={`#/writing/${note.slug}`} key={note.slug}><NoteArtwork type={note.visual}/><span className="overline">0{index+1} / {note.tag} · {note.readTime} read</span><h2>{note.title}</h2><p>{note.teaser}</p><span className="read-note">Read the note <ArrowUpRight size={17}/></span></a>)}</div><Footer/></main>;
 }
 
@@ -508,7 +520,7 @@ function ContactForm() {
 function ContactPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="HAVE A PROBLEM THAT NEEDS STRUCTURE?" title="Start with a conversation." body={site.contactIntro} icon={<Send size={25} />} />
     <div className="contact-layout"><section className="contact-main glass"><div className="section-head"><span className="overline">SEND AN INQUIRY</span><h2>What are you working on?</h2><p>You don't need a perfectly written brief. A few useful details are enough to start.</p></div><ContactForm /></section>
-      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start with good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">DIRECT CONTACT</span><a className="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}><Mail size={18} aria-hidden="true" />{CONTACT_EMAIL}</a>{(isSecureExternalUrl(social.github) || isSecureExternalUrl(social.linkedin)) && <SocialLinks includeEmail={false} />}<p className="social-hint">If the form service is unavailable, you can always email me directly. No phone number is published.</p></div></aside>
+      <aside className="contact-side"><div className="contact-side-card glass"><span className="overline">A FEW THINGS TO KNOW</span><h2>Good problems start with good questions.</h2><p>I’m particularly interested in projects involving thoughtful web applications, organized data, research-led decisions and strong visual communication.</p><div className="contact-location"><MapPin size={20}/><span>{site.location}</span></div></div><div className="contact-side-card glass"><span className="overline">DIRECT CONTACT</span><a className="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}><Mail size={18} aria-hidden="true" />{CONTACT_EMAIL}</a>{isSecureExternalUrl(social.github) && <SocialLinks includeEmail={false} />}<p className="social-hint">If the form service is unavailable, you can always email me directly. No phone number is published.</p></div></aside>
     </div><Footer/></main>;
 }
 
@@ -516,9 +528,9 @@ function PrivacyPage() {
   return <main id="main-content" className="main inner-page"><PageIntro index="04" kicker="ABOUT YOUR INFORMATION" title="A straightforward privacy note." body="This site is designed to collect as little information as possible. Here is what the current version does." icon={<ShieldCheck size={25}/>} />
     <section className="privacy-body glass"><span className="overline">HOW THIS SITE WORKS</span><h2>Browsing</h2><p>There are no user accounts, advertising trackers or site analytics in this version. The appearance preference (light or dark) may be saved in your browser's local storage. Browsing public case studies does not require you to submit personal information.</p>
     <h2>Contact messages</h2><p>If you select Send message, the name, email address, selected topic and message you provide are transmitted to Web3Forms, a third-party form processing service, to forward your inquiry to my email inbox. Web3Forms may process technical connection data for service delivery and abuse prevention. Web3Forms states that its infrastructure is hosted in the United States and that it periodically deletes server logs. When you use direct email instead, your email provider and mine process the message. I do not operate a separate database for these inquiries. Please do not include sensitive or confidential details in an initial message.</p>
-    <h2>Fonts and external links</h2><p>The site may request typefaces from Google Fonts, which can involve a connection to Google's servers. Optional professional-profile links lead to external websites with their own privacy practices.</p>
+    <h2>Fonts and external links</h2><p>The site may request typefaces from Google Fonts, which can involve a connection to Google's servers. The optional GitHub profile link leads to an external website with its own privacy practices.</p>
     <h2>Your choices</h2><p>You do not need to use the contact form. You can clear the site's stored appearance preference through your browser settings. For questions about a message you sent or to request that the site owner delete it, use the available professional contact channel.</p>
-    <div className="privacy-disclaimer"><strong>Publication check:</strong> This is a draft description of the current implementation, not a legal opinion. Before publishing, verify the actual third-party services, their terms and the final retention/deletion practices.</div></section><Footer/></main>;
+    <div className="privacy-disclaimer"><strong>Questions about a message you sent?</strong> Use the email address on the Contact page to ask about your information or request deletion from my inbox.</div></section><Footer/></main>;
 }
 
 function NotFoundPage() {
@@ -543,6 +555,14 @@ export default function App() {
     const note = notes.find((item) => `/writing/${item.slug}` === route);
     const label = project?.title ?? note?.title ?? ({ '/': 'Systems, Data & Design', '/work': 'Selected Work', '/writing': 'Writing', '/about': 'About', '/contact': 'Contact', '/privacy': 'Privacy' } as Record<string, string>)[route] ?? 'Page not found';
     document.title = `${label} — ${baseTitle}`;
+    const description = project?.description || note?.teaser || ({
+      '/': 'Chibueze Ikonne builds thoughtful digital systems across research, software, data and visual communication.',
+      '/work': 'Explore Chibueze Ikonne’s selected work in digital systems, research and visual communication.',
+      '/writing': 'Notes on systems, research, data, product thinking and visual clarity by Chibueze Ikonne.',
+      '/about': 'How Chibueze Ikonne approaches research, systems, applications, data and design.',
+      '/contact': 'Get in touch with Chibueze Ikonne about websites, software systems, research and design.',
+    } as Record<string, string>)[route] || 'Chibueze Ikonne — research, systems, data and design.';
+    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
   }, [route]);
   useEffect(() => { document.documentElement.dataset.theme = theme; try { localStorage.setItem('ci-appearance', theme); } catch { /* Storage may be disabled. */ } }, [theme]);
   const page = useMemo(() => {

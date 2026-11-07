@@ -31,5 +31,7 @@
   "reflection": "Research does not replace expert judgment; it makes the conditions for using that judgment clearer.",
   "workType": "research",
   "published": true,
-  "coverImage": ""
+  "coverImage": "/media/concept-research-index.png",
+  "coverAlt": "Editorial concept of research methods and a verified coauthored publication, not a Google Scholar profile",
+  "coverKind": "editorial"
 }

@@ -1,5 +1,5 @@
 /** Editorial content is stored in src/content, not hardcoded in components.
- * A GitHub-backed CMS may edit JSON and commits trigger a Vercel rebuild.
+ * A GitHub-backed CMS may edit JSON; commits trigger our GitHub Actions → Cloudflare Pages deployment.
  */
 import settings from './content/site.json';
 
@@ -10,7 +10,7 @@ export type Project = {
   design: string; focus: string[]; technology: string[];
   accent: 'blue' | 'mint' | 'violet' | 'amber';
   visualLabel: string; steps: string[]; reflection: string;
-  workType?: WorkType; published?: boolean; coverImage?: string;
+  workType?: WorkType; published?: boolean; coverImage?: string; coverAlt?: string; coverKind?: 'real' | 'concept' | 'editorial';
 };
 export type Note = {
   slug: string; title: string; tag: string; teaser: string; readTime: string;
@@ -20,7 +20,7 @@ export type Note = {
 export type SiteSettings = {
   heroHeadline: string; heroSummary: string; contactEmail: string;
   contactIntro: string; contactTopics: string[]; location: string;
-  githubUrl: string; linkedinUrl: string;
+  githubUrl: string;
 };
 export const site = settings as SiteSettings;
 
