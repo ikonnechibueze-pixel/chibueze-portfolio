@@ -1,0 +1,37 @@
+{
+  "workType": "data",
+  "published": true,
+  "coverKind": "real",
+  "accent": "blue",
+  "technology": [
+    "Data analysis",
+    "Dashboard design",
+    "Data visualization",
+    "Exploratory reporting"
+  ],
+  "slug": "customer-shopping-trends",
+  "index": "09",
+  "title": "Customer Shopping Trends Analysis",
+  "shortTitle": "Shopping Trends",
+  "category": "Data analysis · Customer insights · Dashboard",
+  "status": "Completed analysis dashboard",
+  "description": "A customer-behaviour dashboard exploring common purchases, category mix, payment preferences, buying frequency and seasonal review patterns.",
+  "question": "What do purchasing patterns reveal about customers, product demand and seasonal behaviour?",
+  "design": "Organized customer and purchase measures into a coherent dashboard, placing summary indicators alongside category distributions, product rankings, buying frequency and time-based comparisons. Filters support exploration by season, category and gender.",
+  "focus": [
+    "Customer and purchase indicators summarize the dataset at a glance",
+    "Product-ranking charts show commonly purchased items",
+    "Category and payment comparisons reveal useful shopping patterns",
+    "Seasonal filtering connects behaviour to time"
+  ],
+  "visualLabel": "CUSTOMER SHOPPING TRENDS",
+  "steps": [
+    "Explore",
+    "Group",
+    "Compare",
+    "Communicate"
+  ],
+  "reflection": "The value of a shopping dashboard is in connecting the headline numbers to the habits and categories behind them.",
+  "coverImage": "/media/data-customer-shopping-trends.png",
+  "coverAlt": "Original Customer Shopping Trends dashboard with total customers, average age, purchase amount, product frequencies, category and gender distributions, payment method and seasonal comparisons"
+}

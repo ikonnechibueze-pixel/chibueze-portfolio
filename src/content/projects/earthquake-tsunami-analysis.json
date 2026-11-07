@@ -1,0 +1,37 @@
+{
+  "workType": "data",
+  "published": true,
+  "coverKind": "real",
+  "accent": "violet",
+  "technology": [
+    "Data analysis",
+    "Dashboard design",
+    "Data visualization",
+    "Exploratory reporting"
+  ],
+  "slug": "earthquake-tsunami-analysis",
+  "index": "11",
+  "title": "Global Earthquake & Tsunami Analysis",
+  "shortTitle": "Earthquake & Tsunami",
+  "category": "Data analysis · Environmental data · Dashboard",
+  "status": "Completed analysis dashboard",
+  "description": "An environmental-data dashboard exploring earthquake and tsunami records by magnitude, depth, year and hemisphere across a 2001–2022 dataset.",
+  "question": "How do recorded seismic events and tsunami labels vary across depth, magnitude, time and geography?",
+  "design": "Combined event totals and tsunami share with proportional comparisons and time-series patterns. Filters for magnitude, depth, hemisphere and year make it possible to inspect subsets rather than relying on one summary.",
+  "focus": [
+    "Magnitude and depth comparisons expose differences between groups",
+    "Time-series views highlight changes across the recorded period",
+    "Hemisphere-based comparisons introduce a geographical perspective",
+    "Filters preserve the link between the summary and the underlying subset"
+  ],
+  "visualLabel": "SEISMIC EVENT ANALYSIS",
+  "steps": [
+    "Filter",
+    "Compare",
+    "Trace",
+    "Interpret"
+  ],
+  "reflection": "Environmental dashboards should make categories, time frames and the limits of the source dataset clear.",
+  "coverImage": "/media/data-earthquake-tsunami.png",
+  "coverAlt": "Original Global Earthquake and Tsunami Analysis Dashboard with event and tsunami metrics, year and geographic filters, depth comparisons and time-series patterns"
+}

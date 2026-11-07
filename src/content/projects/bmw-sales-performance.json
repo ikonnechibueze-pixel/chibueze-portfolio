@@ -1,0 +1,37 @@
+{
+  "workType": "data",
+  "published": true,
+  "coverKind": "real",
+  "accent": "mint",
+  "technology": [
+    "Data analysis",
+    "Dashboard design",
+    "Data visualization",
+    "Exploratory reporting"
+  ],
+  "slug": "bmw-sales-performance",
+  "index": "10",
+  "title": "BMW Sales Performance Analytics",
+  "shortTitle": "BMW Sales",
+  "category": "Data analysis · Sales · Dashboard",
+  "status": "Completed analysis dashboard",
+  "description": "A vehicle-sales dashboard examining regional performance, trends, fuel mix, manufacturer comparisons and the relationship between mileage and price.",
+  "question": "Which regions, vehicle attributes and time periods stand out in the analyzed sales dataset?",
+  "design": "Placed revenue, units sold and average selling price across the top, with visual comparisons for sales by region, sales through time, market share and mileage-related pricing patterns. The dashboard presents the dataset; it is not an official BMW financial statement.",
+  "focus": [
+    "Summary indicators establish a quick orientation",
+    "Regional comparisons highlight geographical differences",
+    "Time-series charts show directional changes in sales",
+    "Mileage-versus-price analysis exposes a relationship worth investigating"
+  ],
+  "visualLabel": "VEHICLE SALES ANALYTICS",
+  "steps": [
+    "Measure",
+    "Segment",
+    "Compare",
+    "Interpret"
+  ],
+  "reflection": "Sales visuals become more informative when volume, value, geography and product characteristics can be considered together.",
+  "coverImage": "/media/data-bmw-sales-performance.png",
+  "coverAlt": "Original BMW Sales Performance Analytics dashboard showing sales metrics, regional comparisons, trend lines, market-share bars and mileage versus selling price scatter plot"
+}

@@ -120,7 +120,7 @@ const capabilities = [
 
 function CapabilityCards() {
   return <section className="capabilities" aria-label="Areas of work">
-    {capabilities.map(({ title, label, icon: Icon, tone, description }) => <a key={title} href="#/about" className={`capability glass capability-${tone}`}>
+    {capabilities.map(({ title, label, icon: Icon, tone, description }) => <a key={title} href={title === 'Data' ? '#/work/data' : '#/about'} className={`capability glass capability-${tone}`}>
       <div className="capability-top"><span className="cap-icon"><Icon size={24} strokeWidth={1.9} aria-hidden="true" /></span><span className="card-number">{label}</span></div>
       <div className="capability-bottom"><h2>{title}</h2><p>{description}</p><span className="round-arrow" aria-hidden="true"><ArrowUpRight size={17} /></span></div>
     </a>)}
@@ -272,21 +272,22 @@ function ProjectArtwork({ project, large = false }: { project: Project; large?: 
     ? <img className={`project-cover${large ? ' project-cover-large' : ''}`} src={safeCover} alt={project.coverAlt || `${project.title} project screenshot`} loading="lazy" />
     : <SystemSketch project={project} large={large} />;
 }
-function WorkPage() {
-  const [filter, setFilter] = useState<WorkType | 'all'>('all');
+function WorkPage({ initialFilter = 'all' }: { initialFilter?: WorkType | 'all' }) {
+  const [filter, setFilter] = useState<WorkType | 'all'>(initialFilter);
   const shown = filter === 'all' ? projects : projects.filter((project) => (project.workType || 'systems') === filter);
   return <main id="main-content" className="main inner-page"><PageIntro index="02" kicker="SELECTED CASE STUDIES" title="The work behind the work." body="A wider view of my work—systems, research, data thinking and visual communication. Real outcomes, deliberate decisions and work still in progress." icon={<Workflow size={25} />}/>
     <nav className="work-filters glass" aria-label="Filter work by discipline">{workFilters.map(({ label, value }) => <button type="button" key={value} aria-pressed={filter === value} className={`work-filter${filter === value ? ' selected' : ''}`} onClick={() => setFilter(value)}>{label}</button>)}</nav>
+    {filter === 'data' && <div className="data-work-intro glass"><div><span className="overline">FOUR REAL DASHBOARDS / DATA & ANALYSIS</span><h2>Analysis you can actually inspect.</h2><p>These are original screenshots from datasets I analyzed—covering customer behaviour, automotive sales, environmental events and call-centre operations. They show the analysis as produced, not fabricated portfolio metrics or continuously updating live feeds.</p></div><span className="data-work-count" aria-label="Four dashboard projects">04 <small>dashboards</small></span></div>}
     {shown.length ? <div className="work-cards">{shown.map((project) => <article className="work-card glass" key={project.slug}>
-      <ProjectArtwork project={project}/><div className="work-card-copy"><div className="work-meta"><span>{project.index} / {project.category}</span><span className="status-label">{project.status}</span></div><h2>{project.title}</h2><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read the case study <ArrowRight size={15}/></AnchorButton></div>
-    </article>)}</div> : <div className="work-empty glass"><span className="overline">DATA & ANALYSIS</span><h2>Evidence comes before the case study.</h2><p>I have not published a standalone data-analysis case study yet. I'd rather add one with a real question, method and verified result than pad the portfolio with decorative charts.</p><AnchorButton to="/writing/useful-chart-test" className="small-button">Read how I think about analysis <ArrowRight size={15}/></AnchorButton></div>}
+      <ProjectArtwork project={project}/><div className="work-card-copy"><div className="work-meta"><span>{project.index} / {project.category}</span><span className="status-label">{project.status}</span></div><h2>{project.title}</h2><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read the case study <ArrowRight size={15}/></AnchorButton>{project.workType === 'data' && project.coverImage?.startsWith('/media/') && <a className="data-full-link" href={project.coverImage} target="_blank" rel="noopener noreferrer">View original dashboard at full size <ArrowUpRight size={15}/></a>}</div>
+    </article>)}</div> : <div className="work-empty glass"><h2>More case studies will be added as work is documented.</h2><p>I add evidence-backed work here instead of decorative case studies.</p></div>}
     <Footer/></main>;
 }
 
 function ProjectDetail({ project }: { project: Project }) {
   const next = projects[(projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length];
   return <main id="main-content" className="main inner-page"><div className="detail-nav"><AnchorButton to="/work" className="back-link" icon={false}><ArrowLeft size={16}/> All projects</AnchorButton><span>CASE STUDY / {project.index}</span></div>
-    <section className="case-header glass"><div><div className="case-eyebrow">{project.category} · {project.status}</div><h1>{project.title}</h1><p>{project.description}</p><div className="technology-tags">{project.technology.map((t) => <span key={t}>{t}</span>)}</div></div><ProjectArtwork project={project} large/></section>
+    <section className="case-header glass"><div><div className="case-eyebrow">{project.category} · {project.status}</div><h1>{project.title}</h1><p>{project.description}</p>{project.workType === 'data' && project.coverImage?.startsWith('/media/') && <a className="data-full-link" href={project.coverImage} target="_blank" rel="noopener noreferrer">View original dashboard at full size <ArrowUpRight size={16}/></a>}<div className="technology-tags">{project.technology.map((t) => <span key={t}>{t}</span>)}</div></div><ProjectArtwork project={project} large/></section>
     <div className="case-two-col"><section className="case-section glass"><span className="overline">01 — THE QUESTION</span><h2>What needed to make sense?</h2><p>{project.question}</p></section><section className="case-section glass"><span className="overline">02 — MY APPROACH</span><h2>Structure first.</h2><p>{project.design}</p></section></div>
     <section className="case-section glass case-focus"><span className="overline">03 — WHAT MATTERED</span><h2>Decisions beneath the surface.</h2><div className="decision-grid">{project.focus.map((point, index) => <div key={point}><span className="decision-index">0{index + 1}</span><p>{point}</p></div>)}</div></section>
     <section className="case-section glass reflection"><div><span className="overline">04 — THE TAKEAWAY</span><h2>What this work reinforced.</h2><p>{project.reflection}</p></div><AnchorButton to={`/work/${next.slug}`} className="button button-dark" icon={false}>Next case study <ArrowRight size={16}/></AnchorButton></section>
@@ -349,8 +350,8 @@ const researchExamples = [
     label: 'DATA REASONING',
     title: 'Ask what the numbers should answer.',
     body: 'Starting with the distinction someone needs to see, then deciding whether a comparison, report, chart or simpler explanation is the clearest response.',
-    path: '/writing/useful-chart-test',
-    link: 'Read the analysis note',
+    path: '/work/data',
+    link: 'Explore four real analysis dashboards',
   },
 ];
 
@@ -555,11 +556,12 @@ export default function App() {
     const baseTitle = 'Chibueze Ikonne';
     const project = projects.find((item) => `/work/${item.slug}` === route);
     const note = notes.find((item) => `/writing/${item.slug}` === route);
-    const label = project?.title ?? note?.title ?? ({ '/': 'Systems, Data & Design', '/work': 'Selected Work', '/writing': 'Writing', '/about': 'About', '/contact': 'Contact', '/privacy': 'Privacy' } as Record<string, string>)[route] ?? 'Page not found';
+    const label = project?.title ?? note?.title ?? ({ '/': 'Systems, Data & Design', '/work': 'Selected Work', '/work/data': 'Data & Analysis', '/writing': 'Writing', '/about': 'About', '/contact': 'Contact', '/privacy': 'Privacy' } as Record<string, string>)[route] ?? 'Page not found';
     document.title = `${label} — ${baseTitle}`;
     const description = project?.description || note?.teaser || ({
       '/': 'Chibueze Ikonne builds thoughtful digital systems across research, software, data and visual communication.',
       '/work': 'Explore Chibueze Ikonne’s selected work in digital systems, research and visual communication.',
+      '/work/data': 'Real data analysis dashboards created by Chibueze Ikonne: customer shopping, automotive sales, earthquake and tsunami records, and call-centre reporting.',
       '/writing': 'Notes on systems, research, data, product thinking and visual clarity by Chibueze Ikonne.',
       '/about': 'How Chibueze Ikonne approaches research, systems, applications, data and design.',
       '/contact': 'Get in touch with Chibueze Ikonne about websites, software systems, research and design.',
@@ -570,6 +572,7 @@ export default function App() {
   const page = useMemo(() => {
     if (route === '/' || route === '') return <HomePage />;
     if (route === '/work') return <WorkPage />;
+    if (route === '/work/data') return <WorkPage initialFilter="data" />;
     if (route === '/writing') return <WritingPage />;
     if (route === '/about') return <AboutPage />;
     if (route === '/contact') return <ContactPage />;

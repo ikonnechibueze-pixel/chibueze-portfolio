@@ -1,0 +1,37 @@
+{
+  "workType": "data",
+  "published": true,
+  "coverKind": "real",
+  "accent": "violet",
+  "technology": [
+    "Data analysis",
+    "Dashboard design",
+    "Data visualization",
+    "Exploratory reporting"
+  ],
+  "slug": "call-center-agents-analysis",
+  "index": "12",
+  "title": "Call Center Agents Analysis",
+  "shortTitle": "Call Center",
+  "category": "Data analysis · Service operations · Dashboard",
+  "status": "Completed analysis dashboard",
+  "description": "A service-operations dashboard comparing call volume, reasons for contact, satisfaction, talk time, waiting time and agent-level patterns.",
+  "question": "What can call-centre activity reveal about customer-contact demand and service performance?",
+  "design": "Presented operational KPIs beside call-reason rankings, monthly and weekday trends, talk-time patterns and an agent table. This makes both overall workload and more detailed variations visible.",
+  "focus": [
+    "Contact reasons show major demand categories",
+    "Time trends distinguish monthly and weekday patterns",
+    "Talk time, wait time and satisfaction provide complementary service measures",
+    "An agent-level table supports detailed follow-up while summary cards preserve context"
+  ],
+  "visualLabel": "SERVICE OPERATIONS REPORT",
+  "steps": [
+    "Collect",
+    "Summarize",
+    "Compare",
+    "Review"
+  ],
+  "reflection": "A service dashboard should avoid treating a single metric as the whole story; workload and customer experience need to be seen together.",
+  "coverImage": "/media/data-call-center-agents.png",
+  "coverAlt": "Original Call Center Agents Analysis Power BI dashboard showing call counts, satisfaction, talk time, wait time, call-reason charts and agent-level measures"
+}

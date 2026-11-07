@@ -914,7 +914,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Replace arbitrary nature artwork with relevant editorial UI previews. */
 .note-art-blueprint { background: url('/media/concept-repository-ui.png') center / cover no-repeat !important; }
 .note-art-layers { background: url('/media/writing-legibility-concept.jpg') center / cover no-repeat !important; }
-.note-art-horizon { background: url('/media/writing-useful-chart-concept.jpg') center / cover no-repeat !important; }
+.note-art-horizon { background: url('/media/data-earthquake-tsunami.png') center / cover no-repeat !important; }
 .note-art > * {display:none !important;}
 @media (max-width: 850px) { .publication-feature {grid-template-columns:1fr;}.publication-feature>img{max-height:340px;}.publication-feature-copy{padding:8px;} }
 
@@ -998,7 +998,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Editorial screenshot thumbnails preserve their composition at all sizes. */
 .note-art-blueprint { background: #edf2fe url('/media/concept-repository-ui.png') center / contain no-repeat !important; }
 .note-art-layers { background: #edf2fe url('/media/writing-legibility-concept.jpg') center / contain no-repeat !important; }
-.note-art-horizon { background: #edf2fe url('/media/writing-useful-chart-concept.jpg') center / contain no-repeat !important; }
+.note-art-horizon { background: #edf2fe url('/media/data-earthquake-tsunami.png') center / contain no-repeat !important; }
 :root[data-theme='dark'] .feature-screenshot,
 :root[data-theme='dark'] .project-cover,
 :root[data-theme='dark'] .publication-feature>img { background: #202c49; }
@@ -1070,4 +1070,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 620px) {
   .writing-card .note-art-layers::after,
   .writing-card .note-art-horizon::after { font-size: 9px; padding: 4px 7px; }
+}
+
+
+/* v0.9.3: Evidence-first data analysis portfolio. No change to the approved layout system. */
+.data-work-intro {
+  margin-top: 13px;
+  padding: clamp(22px, 3vw, 34px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+.data-work-intro h2 { font-size: clamp(22px, 2.7vw, 33px); margin: 9px 0 10px; letter-spacing: -.055em; }
+.data-work-intro p { font-size: 13px; line-height: 1.65; color: var(--muted); max-width: 740px; margin: 0; }
+.data-work-count { flex: 0 0 auto; font-family: Manrope,sans-serif; font-size: 51px; font-weight: 750; line-height: .95; color: #5555af; letter-spacing: -.065em; }
+.data-work-count small { display: block; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 750; color: var(--muted); margin-top: 8px; }
+.data-full-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; color: #5359be; font-size: 12px; line-height: 1.4; font-weight: 750; margin-top: 13px; }
+.data-full-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.data-full-link:focus-visible { outline: 3px solid #8882fb; outline-offset: 4px; border-radius: 3px; }
+.work-card .data-full-link { margin-bottom: 9px; }
+:root[data-theme='dark'] .data-work-intro h2 { color: #f0f4ff; }
+:root[data-theme='dark'] .data-work-count, :root[data-theme='dark'] .data-full-link { color: #b7b4ff; }
+@media (max-width:620px) {
+  .data-work-intro { align-items: flex-start; gap: 10px; }
+  .data-work-count { font-size: 34px; }
+  .data-work-count small { font-size: 9px; }
+  .data-work-intro p { font-size: 12px; }
 }
