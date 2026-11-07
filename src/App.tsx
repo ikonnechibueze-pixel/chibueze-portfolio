@@ -187,7 +187,9 @@ function FeaturedWork() {
       <div className="feature-text"><span className="feature-index">{project.index} <span className="feature-category">/ {project.category}</span></span><h3>{project.title}</h3><p>{project.description}</p><AnchorButton to={`/work/${project.slug}`} className="small-button">Read case study <ArrowRight size={15}/></AnchorButton></div>
       {project.coverImage?.startsWith('/media/') ? (
         <figure className="feature-screenshot">
-          <img src={project.coverImage} alt={project.coverAlt || `${project.title} project screenshot`} loading="lazy" />
+          <a className="feature-screenshot-link" href={project.coverImage} target="_blank" rel="noopener noreferrer" aria-label={`Open full-size image: ${project.title}`} title="Open full-size project image">
+            <img src={project.coverImage} alt={project.coverAlt || `${project.title} project screenshot`} loading="lazy" />
+          </a>
           <figcaption>{project.coverKind === 'concept' ? 'Interface concept · illustrative' : project.coverKind === 'editorial' ? 'Editorial preview · not an original paper scan' : 'Real project screenshot'}</figcaption>
         </figure>
       ) : <FeaturedDevice project={project} />}

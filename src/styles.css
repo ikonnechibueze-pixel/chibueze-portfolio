@@ -917,3 +917,124 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .note-art-horizon { background: url('/media/concept-research-index.png') center / cover no-repeat !important; }
 .note-art > * {display:none !important;}
 @media (max-width: 850px) { .publication-feature {grid-template-columns:1fr;}.publication-feature>img{max-height:340px;}.publication-feature-copy{padding:8px;} }
+
+
+/* v0.9.1 — keep the actual 16:9 screenshots fully visible and give controls their own space. */
+/* The previous fixed 427px panel height caused controls to hang over the next section. */
+.featured,
+.notes-panel {
+  height: auto;
+  min-height: 0;
+}
+.featured {
+  min-width: 0;
+}
+.featured .feature-content {
+  flex: 0 0 auto;
+  height: 320px;
+  min-height: 320px;
+}
+.featured .feature-controls {
+  flex: 0 0 auto;
+  position: static;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  margin: 12px 0 0;
+  padding: 0 0 2px;
+  align-self: stretch;
+  gap: 18px;
+}
+.featured .feature-controls button {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+}
+.featured .feature-controls > span {
+  font-variant-numeric: tabular-nums;
+  min-width: 48px;
+  text-align: center;
+}
+.feature-screenshot {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: linear-gradient(135deg, #ecf3ff, #f8f7ff);
+}
+.feature-screenshot-link {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+}
+.feature-screenshot-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Never crop project screenshots, including left-side headings. */
+  object-position: center center;
+}
+.feature-screenshot figcaption { pointer-events: none; }
+/* Work cards / case studies likewise show the full screen, not a cropped fragment. */
+.project-cover,
+.project-cover-large {
+  object-fit: contain;
+  object-position: center center;
+  background: #eaf0fb;
+}
+.publication-feature>img {
+  object-fit: contain;
+  object-position: center;
+  background: #eef2fa;
+}
+/* Editorial screenshot thumbnails preserve their composition at all sizes. */
+.note-art-blueprint { background: #edf2fe url('/media/concept-repository-ui.png') center / contain no-repeat !important; }
+.note-art-layers { background: #edf2fe url('/media/concept-research-paper.png') center / contain no-repeat !important; }
+.note-art-horizon { background: #edf2fe url('/media/concept-research-index.png') center / contain no-repeat !important; }
+:root[data-theme='dark'] .feature-screenshot,
+:root[data-theme='dark'] .project-cover,
+:root[data-theme='dark'] .publication-feature>img { background: #202c49; }
+:root[data-theme='dark'] .note-art { background-color: #293859 !important; }
+
+/* The original layout stacks Selected Work vertically on smaller screens. */
+@media (max-width: 850px) {
+  .featured .feature-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+  }
+  .featured .feature-text {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 23px 24px 21px;
+  }
+  .featured .feature-text .small-button { margin-top: 10px; }
+  .feature-screenshot {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .feature-screenshot-link { position: absolute; inset: 0; height: 100%; }
+  .featured .feature-controls { margin-top: 13px; height: 46px; min-height: 46px; }
+  .featured .feature-controls button { width: 38px; height: 38px; }
+}
+@media (max-width: 620px) {
+  .featured { height: auto; min-height: 0; padding: 17px 17px 14px; }
+  .featured .feature-content { min-height: 0; }
+  .featured .feature-text { padding: 21px 22px 19px; }
+  .featured .feature-text h3 { font-size: clamp(21px, 5.9vw, 26px); }
+  .featured .feature-text > p { font-size: 12px; line-height: 1.55; }
+  .feature-screenshot figcaption { right: 8px; bottom: 8px; font-size: 9px; padding: 5px 8px; }
+  .featured .feature-controls { margin-top: 11px; }
+}
