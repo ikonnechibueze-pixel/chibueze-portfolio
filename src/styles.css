@@ -913,8 +913,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 :root[data-theme='dark'] .publication-feature p,:root[data-theme='dark'] .publication-disclaimer{color:#aebcd3;}
 /* Replace arbitrary nature artwork with relevant editorial UI previews. */
 .note-art-blueprint { background: url('/media/concept-repository-ui.png') center / cover no-repeat !important; }
-.note-art-layers { background: url('/media/concept-research-paper.png') center / cover no-repeat !important; }
-.note-art-horizon { background: url('/media/concept-research-index.png') center / cover no-repeat !important; }
+.note-art-layers { background: url('/media/writing-legibility-concept.jpg') center / cover no-repeat !important; }
+.note-art-horizon { background: url('/media/writing-useful-chart-concept.jpg') center / cover no-repeat !important; }
 .note-art > * {display:none !important;}
 @media (max-width: 850px) { .publication-feature {grid-template-columns:1fr;}.publication-feature>img{max-height:340px;}.publication-feature-copy{padding:8px;} }
 
@@ -997,8 +997,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 /* Editorial screenshot thumbnails preserve their composition at all sizes. */
 .note-art-blueprint { background: #edf2fe url('/media/concept-repository-ui.png') center / contain no-repeat !important; }
-.note-art-layers { background: #edf2fe url('/media/concept-research-paper.png') center / contain no-repeat !important; }
-.note-art-horizon { background: #edf2fe url('/media/concept-research-index.png') center / contain no-repeat !important; }
+.note-art-layers { background: #edf2fe url('/media/writing-legibility-concept.jpg') center / contain no-repeat !important; }
+.note-art-horizon { background: #edf2fe url('/media/writing-useful-chart-concept.jpg') center / contain no-repeat !important; }
 :root[data-theme='dark'] .feature-screenshot,
 :root[data-theme='dark'] .project-cover,
 :root[data-theme='dark'] .publication-feature>img { background: #202c49; }
@@ -1037,4 +1037,37 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .featured .feature-text > p { font-size: 12px; line-height: 1.55; }
   .feature-screenshot figcaption { right: 8px; bottom: 8px; font-size: 9px; padding: 5px 8px; }
   .featured .feature-controls { margin-top: 11px; }
+}
+
+/* v0.9.2 — clearly distinguish article-cover concepts from live applications and verified results. */
+.writing-card .note-art-layers::after,
+.writing-card .note-art-horizon::after,
+.essay-banner .note-art-layers::after,
+.essay-banner .note-art-horizon::after {
+  content: 'UI study · illustrative data';
+  position: absolute;
+  right: 11px;
+  bottom: 10px;
+  z-index: 2;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(90,103,150,.14);
+  box-shadow: 0 2px 10px rgba(36,48,88,.06);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .015em;
+  line-height: 1.2;
+  color: #455172;
+}
+:root[data-theme='dark'] .writing-card .note-art-layers::after,
+:root[data-theme='dark'] .writing-card .note-art-horizon::after,
+:root[data-theme='dark'] .essay-banner .note-art-layers::after,
+:root[data-theme='dark'] .essay-banner .note-art-horizon::after {
+  background: rgba(31,44,72,.94);
+  color: #e1e8f9;
+}
+@media (max-width: 620px) {
+  .writing-card .note-art-layers::after,
+  .writing-card .note-art-horizon::after { font-size: 9px; padding: 4px 7px; }
 }
